@@ -447,6 +447,7 @@ html[data-ui-scale="comfortable"] {
 --------------------------------------------------------------------------- */
 .app-shell {
   max-width: 480px;
+  padding-top: calc(env(safe-area-inset-top) + 6px);
 }
 
 @media (min-width: 640px) {
