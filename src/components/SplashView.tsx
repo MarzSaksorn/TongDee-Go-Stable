@@ -13,7 +13,6 @@ export default function SplashView({ onNext }: SplashViewProps) {
     <div
       id="splash-screen"
       className="relative flex flex-col justify-between items-center h-full w-full bg-gradient-to-br from-primary to-primary/80 p-8 text-primary-foreground overflow-hidden"
-      style={{ marginTop: "calc(-1 * env(safe-area-inset-top))", paddingTop: "calc(env(safe-area-inset-top) + 32px)" }}
     >
       <div className="absolute top-[-10%] right-[-15%] w-72 h-72 rounded-full border border-primary-foreground/10 pointer-events-none" />
       <div className="absolute top-[20%] left-[-20%] w-96 h-96 rounded-full border border-primary-foreground/5 pointer-events-none" />

@@ -195,7 +195,7 @@ export default function LocalTaxiView({ onBack }: LocalTaxiViewProps) {
 
   return (
     <div id="local-taxi-screen" className="flex flex-col h-full w-full bg-background overflow-y-auto">
-      <div className="bg-gradient-to-b from-primary to-primary/90 px-4 pt-3 pb-6 text-primary-foreground">
+      <div className="bg-gradient-to-b from-primary to-primary/90 px-4 pt-6 pb-6 text-primary-foreground">
         <div className="flex items-center gap-3 mb-3">
           {onBack && (
             <button

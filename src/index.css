@@ -447,7 +447,19 @@ html[data-ui-scale="comfortable"] {
 --------------------------------------------------------------------------- */
 .app-shell {
   max-width: 480px;
+}
+
+/* Global top clearance: keep screen content below the status bar. Padded on
+   each screen root (inside the viewport) so full-bleed colored headers can
+   bleed back up into the padding with their own background — no visible band. */
+#app-main-viewport > * {
   padding-top: calc(env(safe-area-inset-top) + 20px);
+}
+
+/* Full-bleed colored headers extend back up into the screen's top padding */
+#app-main-viewport > * > div[class*="bg-primary"],
+#app-main-viewport > * > div[class*="bg-gradient"] {
+  margin-top: calc(-1 * (env(safe-area-inset-top) + 20px));
 }
 
 @media (min-width: 640px) {

@@ -257,7 +257,7 @@ export default function TaxiProviderRegisterView({ onBack }: TaxiProviderRegiste
 
     return (
       <div className="flex flex-col h-full w-full bg-background">
-        <div className="bg-gradient-to-b from-primary to-primary/90 px-4 pt-3 pb-6 text-primary-foreground">
+        <div className="bg-gradient-to-b from-primary to-primary/90 px-4 pt-6 pb-6 text-primary-foreground">
           <div className="flex items-center gap-3">
             <button onClick={onBack} className="p-1.5 -ml-1.5 hover:bg-white/10 active:scale-95 rounded-xl transition-all cursor-pointer">
               <ArrowLeft className="w-5 h-5" />
@@ -487,7 +487,7 @@ export default function TaxiProviderRegisterView({ onBack }: TaxiProviderRegiste
 
     return (
       <div className="flex flex-col h-full w-full bg-background">
-        <div className="bg-gradient-to-b from-primary to-primary/90 px-4 pt-3 pb-6 text-primary-foreground">
+        <div className="bg-gradient-to-b from-primary to-primary/90 px-4 pt-6 pb-6 text-primary-foreground">
           <div className="flex items-center gap-3">
             <button onClick={onBack} className="p-1.5 -ml-1.5 hover:bg-white/10 active:scale-95 rounded-xl transition-all cursor-pointer">
               <ArrowLeft className="w-5 h-5" />
@@ -514,7 +514,7 @@ export default function TaxiProviderRegisterView({ onBack }: TaxiProviderRegiste
 
   return (
     <div className="flex flex-col h-full w-full bg-background">
-      <div className="bg-gradient-to-b from-primary to-primary/90 px-4 pt-3 pb-6 text-primary-foreground">
+      <div className="bg-gradient-to-b from-primary to-primary/90 px-4 pt-6 pb-6 text-primary-foreground">
         <div className="flex items-center gap-3">
           <button onClick={onBack} className="p-1.5 -ml-1.5 hover:bg-white/10 active:scale-95 rounded-xl transition-all cursor-pointer">
             <ArrowLeft className="w-5 h-5" />
