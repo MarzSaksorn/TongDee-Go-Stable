@@ -284,7 +284,7 @@ export default function AITripPlannerView({
       className="flex flex-col h-full w-full bg-background overflow-y-auto pb-[calc(96px+env(safe-area-inset-bottom))]"
     >
       {/* Header */}
-      <div className="bg-gradient-to-b from-primary to-primary/90 text-primary-foreground px-5 pt-12 pb-6 relative overflow-hidden shrink-0">
+      <div className="bg-gradient-to-b from-primary to-primary/90 text-primary-foreground px-5 pt-12 pb-6 relative overflow-hidden shrink-0 safe-bleed">
         <div className="absolute top-[-20%] right-[-15%] w-48 h-48 rounded-full bg-white/5 blur-3xl pointer-events-none" />
         <div className="absolute bottom-[-10%] left-[-5%] w-32 h-32 rounded-full bg-white/8 blur-2xl pointer-events-none" />
         <div className="flex items-center gap-3 relative z-10">

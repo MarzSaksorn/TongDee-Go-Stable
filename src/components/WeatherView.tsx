@@ -94,7 +94,7 @@ export function WeatherView({ onBack }: WeatherViewProps) {
 
   return (
     <div className="flex flex-col h-full w-full bg-background">
-      <div className={`relative flex flex-col bg-gradient-to-b ${gradient} pb-6 pt-[calc(12px+env(safe-area-inset-top))]`}>
+      <div className={`relative flex flex-col bg-gradient-to-b ${gradient} pb-6 pt-[calc(40px+env(safe-area-inset-top))] safe-bleed`}>
         <div className="flex items-center gap-3 px-4 py-2">
           <button
             type="button"

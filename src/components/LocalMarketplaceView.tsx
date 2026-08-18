@@ -387,7 +387,7 @@ export default function LocalMarketplaceView({ onBack, initialProductId }: Local
   return (
     <div className="flex flex-col h-full w-full bg-background overflow-x-hidden relative animate-fade-in-up">
       {/* Header */}
-      <div className="bg-gradient-to-b from-primary to-primary/90 text-primary-foreground px-4 pt-5 pb-4 relative z-10">
+      <div className="bg-gradient-to-b from-primary to-primary/90 text-primary-foreground px-4 pt-12 pb-4 relative z-10 safe-bleed">
         <div className="absolute top-[-20%] right-[-15%] w-40 h-40 rounded-full bg-white/5 blur-2xl pointer-events-none" />
         <div className="absolute bottom-[-10%] left-[-10%] w-32 h-32 rounded-full bg-white/8 blur-xl pointer-events-none" />
 

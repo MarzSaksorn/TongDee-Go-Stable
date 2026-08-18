@@ -456,9 +456,10 @@ html[data-ui-scale="comfortable"] {
   padding-top: calc(env(safe-area-inset-top) + 20px);
 }
 
-/* Full-bleed colored headers extend back up into the screen's top padding */
-#app-main-viewport > * > div[class*="bg-primary"],
-#app-main-viewport > * > div[class*="bg-gradient"] {
+/* Full-bleed colored headers extend back up into the screen's top padding.
+   Opt-in via .safe-bleed on the header element (only true full-bleed headers
+   should bleed; rounded/margined cards must stay below the status bar). */
+#app-main-viewport > * > .safe-bleed {
   margin-top: calc(-1 * (env(safe-area-inset-top) + 20px));
 }
 

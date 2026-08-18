@@ -161,7 +161,7 @@ export default function AdminPanelView({ onBack, onLocationsChange, onAccommodat
   return (
     <div className="flex flex-col h-full bg-muted relative overflow-hidden animate-fade-in-up">
       {/* Header */}
-      <div className="bg-primary text-primary-foreground px-4 pt-12 pb-4 relative z-20 shrink-0 border-b border-blue-800">
+      <div className="bg-primary text-primary-foreground px-4 pt-12 pb-4 relative z-20 shrink-0 border-b border-blue-800 safe-bleed">
         <div className="flex items-center">
           <button 
             onClick={onBack}

@@ -101,7 +101,7 @@ export default function ActiveTripView({
   return (
     <div className="flex flex-col h-full w-full bg-background overflow-y-auto pb-[calc(120px+env(safe-area-inset-bottom))]">
       {/* Header */}
-      <div className="bg-gradient-to-b from-primary to-primary/90 text-primary-foreground px-5 pt-12 pb-4 relative shrink-0">
+      <div className="bg-gradient-to-b from-primary to-primary/90 text-primary-foreground px-5 pt-12 pb-4 relative shrink-0 safe-bleed">
         <div className="absolute top-[-20%] right-[-15%] w-48 h-48 rounded-full bg-white/5 blur-3xl pointer-events-none" />
         <div className="flex items-center justify-between relative z-10">
           <div className="flex items-center gap-3 min-w-0 flex-1">

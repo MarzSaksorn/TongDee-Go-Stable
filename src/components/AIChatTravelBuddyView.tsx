@@ -52,7 +52,7 @@ export default function AIChatTravelBuddyView({
       className="flex flex-col h-full w-full bg-background pb-16 overflow-hidden animate-fade-in-up"
     >
       {/* Head banner */}
-      <div className="bg-primary text-primary-foreground p-4 pt-6 flex items-center shadow-md relative overflow-hidden">
+      <div className="bg-primary text-primary-foreground p-4 pt-12 flex items-center shadow-md relative overflow-hidden safe-bleed">
         {/* Decorative circles */}
         <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-primary-foreground/10" />
         <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-primary-foreground/10" />
