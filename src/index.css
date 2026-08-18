@@ -1,0 +1,487 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: "Prompt", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: var(--background);
+  }
+
+  body {
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overscroll-behavior-y: none;
+    @apply bg-background text-foreground;
+  }
+
+  * {
+    box-sizing: border-box;
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+:root {
+  --app-max-width: 480px;
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-top: env(safe-area-inset-top);
+  --app-font-size: 14.5px;
+
+  --map-preview-bottom: calc(90px + env(safe-area-inset-bottom));
+  --map-preview-padding: 14px;
+  --map-preview-radius: 26px;
+
+  --background: #FFFFFF;
+  --foreground: #1F2937;
+  --card: #FFFFFF;
+  --card-foreground: #1F2937;
+  --popover: #FFFFFF;
+  --popover-foreground: #1F2937;
+  --primary: #1E5BFF;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F8FAFC;
+  --secondary-foreground: #1F2937;
+  --muted: #F1F5F9;
+  --muted-foreground: #64748B;
+  --accent: #F1F5F9;
+  --accent-foreground: #1F2937;
+  --destructive: #EF4444;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #1E5BFF;
+  --chart-1: #1E5BFF;
+  --chart-2: #10B981;
+  --chart-3: #F59E0B;
+  --chart-4: #8B5CF6;
+  --chart-5: #EC4899;
+  --radius: 0.625rem;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1F2937;
+  --sidebar-primary: #1E5BFF;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F1F5F9;
+  --sidebar-accent-foreground: #1F2937;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #1E5BFF;
+}
+
+html {
+  font-size: var(--app-font-size);
+}
+
+html[data-ui-scale="compact"] {
+  --app-font-size: 14px;
+
+  --map-preview-bottom: calc(86px + env(safe-area-inset-bottom));
+  --map-preview-padding: 12px;
+  --map-preview-radius: 24px;
+}
+
+html[data-ui-scale="normal"] {
+  --app-font-size: 15.5px;
+
+  --map-preview-bottom: calc(104px + env(safe-area-inset-bottom));
+  --map-preview-padding: 16px;
+  --map-preview-radius: 28px;
+}
+
+html[data-ui-scale="comfortable"] {
+  --app-font-size: 16.5px;
+
+  --map-preview-bottom: calc(116px + env(safe-area-inset-bottom));
+  --map-preview-padding: 18px;
+  --map-preview-radius: 30px;
+}
+
+
+
+/* 
+  Compact High DPI scaling utility
+  When active or on standard normal-screen phones, this compresses paddings, margins,
+  and typography sizing to secure peak vertical/horizontal density and eliminate overlapping.
+*/
+.compact-dpi {
+  font-size: 0.91em;
+}
+
+.compact-dpi .p-6 {
+  padding: 0.95rem !important;
+}
+
+.compact-dpi .p-5 {
+  padding: 0.85rem !important;
+}
+
+.compact-dpi .p-4 {
+  padding: 0.7rem !important;
+}
+
+.compact-dpi .px-5 {
+  padding-left: 0.9rem !important;
+  padding-right: 0.9rem !important;
+}
+
+.compact-dpi .py-3\.5 {
+  padding-top: 0.6rem !important;
+  padding-bottom: 0.6rem !important;
+}
+
+.compact-dpi .mb-6 {
+  margin-bottom: 0.75rem !important;
+}
+
+.compact-dpi .mb-4 {
+  margin-bottom: 0.5rem !important;
+}
+
+.compact-dpi .mt-6 {
+  margin-top: 0.75rem !important;
+}
+
+.compact-dpi .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.65rem * (1 - var(--tw-space-y-reverse))) !important;
+  margin-bottom: calc(0.65rem * var(--tw-space-y-reverse)) !important;
+}
+
+.compact-dpi .space-y-5 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.75rem * (1 - var(--tw-space-y-reverse))) !important;
+  margin-bottom: calc(0.75rem * var(--tw-space-y-reverse)) !important;
+}
+
+.compact-dpi h1, 
+.compact-dpi .text-2xl {
+  font-size: 1.35rem !important;
+  line-height: 1.25 !important;
+}
+
+.compact-dpi h2, 
+.compact-dpi .text-xl {
+  font-size: 1.15rem !important;
+  line-height: 1.25 !important;
+}
+
+.compact-dpi h3, 
+.compact-dpi .text-lg {
+  font-size: 0.98rem !important;
+  line-height: 1.2 !important;
+}
+
+.compact-dpi .text-base {
+  font-size: 0.82rem !important;
+}
+
+.compact-dpi .text-sm {
+  font-size: 0.74rem !important;
+}
+
+.compact-dpi .text-xs {
+  font-size: 0.66rem !important;
+}
+
+.compact-dpi .h-44 {
+  height: 9.3rem !important;
+}
+
+.compact-dpi .h-64 {
+  height: 12.5rem !important;
+}
+
+.compact-dpi .w-14, 
+.compact-dpi .h-14 {
+  width: 3rem !important;
+  height: 3rem !important;
+}
+
+.compact-dpi .w-16, 
+.compact-dpi .h-16 {
+  width: 3.5rem !important;
+  height: 3.5rem !important;
+}
+
+/* Ensure critical outer layout wrapper containers are NOT broken by compact modes */
+.compact-dpi .nav-bar-stable {
+  height: 4rem !important; /* standard h-16 is 4rem (64px) */
+  width: 100% !important;
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+  font-size: 1.1rem !important; /* Keep layout text & icon scaling standard */
+}
+
+.compact-dpi .nav-bar-stable span {
+  font-size: 9px !important; /* maintain readable tab label text */
+  margin-top: 0.25rem !important;
+}
+
+.compact-dpi .physical-bar-stable {
+  height: 1rem !important; /* standard h-4 */
+}
+
+.compact-dpi .header-bar-stable {
+  padding-top: 0.875rem !important; /* standard py-3.5 */
+  padding-bottom: 0.875rem !important;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.dark .glass {
+  background: rgba(30, 41, 59, 0.85);
+}
+
+.glass-dark {
+  background: rgba(23, 63, 204, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Custom scrollbars for a cleaner mobile app look */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Pulsing effect for safety mode symbol */
+@keyframes double-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-safe-pulse {
+  animation: double-pulse 2s infinite ease-in-out;
+}
+
+/* Entrance animation for staggered sections */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Reduced motion: collapse all animation */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.map-sheet-drag-handle,
+.map-detail-top-handle {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.map-detail-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.map-fullscreen-detail {
+  overscroll-behavior: contain;
+}
+
+.map-sheet {
+  overscroll-behavior: contain;
+}
+
+.map-sheet.dragging {
+  transition: none !important;
+}
+
+.map-location-compact-box {
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.map-location-compact-box.dragging {
+  touch-action: none;
+  transition: none !important;
+}
+
+.location-detail-action-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 80;
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+  background: var(--card);
+  backdrop-filter: blur(18px);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.dark .location-detail-action-bar {
+  background: rgba(30, 41, 59, 0.96);
+  border-top: 1px solid rgba(51, 65, 85, 0.9);
+  box-shadow: 0 -12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.location-detail-scroll-content {
+  padding-bottom: calc(110px + env(safe-area-inset-bottom));
+}
+
+
+
+.dark {
+  --background: #0F172A;
+  --foreground: #F8FAFC;
+  --card: #1E293B;
+  --card-foreground: #F1F5F9;
+  --popover: #1E293B;
+  --popover-foreground: #F1F5F9;
+  --primary: #60A5FA;
+  --primary-foreground: #0F172A;
+  --secondary: #1E293B;
+  --secondary-foreground: #F1F5F9;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #1E293B;
+  --accent-foreground: #F1F5F9;
+  --destructive: #F87171;
+  --border: #334155;
+  --input: #334155;
+  --ring: #60A5FA;
+  --chart-1: #60A5FA;
+  --chart-2: #34D399;
+  --chart-3: #FBBF24;
+  --chart-4: #A78BFA;
+  --chart-5: #F472B6;
+  --sidebar: #1E293B;
+  --sidebar-foreground: #F1F5F9;
+  --sidebar-primary: #60A5FA;
+  --sidebar-primary-foreground: #0F172A;
+  --sidebar-accent: #1E293B;
+  --sidebar-accent-foreground: #F1F5F9;
+  --sidebar-border: #334155;
+  --sidebar-ring: #60A5FA;
+}
+
+/* ---------------------------------------------------------------------------
+   Responsive app shell: a mobile-first column that widens on larger displays
+   and adapts to landscape orientation. Applied via the .app-shell class on
+   the root app container (src/App.tsx).
+--------------------------------------------------------------------------- */
+.app-shell {
+  max-width: 480px;
+}
+
+@media (min-width: 640px) {
+  .app-shell { max-width: 560px; }
+}
+
+@media (min-width: 1024px) {
+  .app-shell { max-width: 720px; }
+}
+
+@media (min-width: 1280px) {
+  .app-shell { max-width: 960px; }
+}
+
+@media (min-width: 1536px) {
+  .app-shell { max-width: 1280px; }
+}
+
+/* Target device: Honor Pad 10 (1600x2560, 16:10) — the shell fills the width */
+@media (min-width: 1600px) {
+  .app-shell { max-width: 1600px; }
+}
+
+/* Landscape phones/tablets: use the wide viewport instead of the tall column */
+@media (orientation: landscape) and (max-height: 500px) {
+  .app-shell { max-width: min(92vw, 720px); }
+}
+
+/* Desktop backdrop so the centered shell doesn't float on plain white */
+@media (min-width: 1024px) {
+  body {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--primary) 6%, var(--background)) 0%,
+      var(--background) 420px
+    );
+  }
+}

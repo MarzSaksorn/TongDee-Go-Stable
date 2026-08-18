@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-25T00:00:00.000Z",
+  "title": "Design System: Tong Dee Go",
+  "extensions": {
+    "colorMeta": {
+      "tongdee-blue": { "role": "primary", "displayName": "Tongdee Blue", "canonical": "#1E5BFF", "tonalRamp": ["oklch(23% 0.09 264)", "oklch(34% 0.15 264)", "oklch(47% 0.21 264)", "oklch(58% 0.24 264)", "oklch(68% 0.17 264)", "oklch(78% 0.11 264)", "oklch(88% 0.06 264)", "oklch(96% 0.025 264)"] },
+      "local-amber": { "role": "secondary", "displayName": "Local Amber", "canonical": "#F59E0B", "tonalRamp": ["oklch(24% 0.07 75)", "oklch(36% 0.11 75)", "oklch(48% 0.14 75)", "oklch(62% 0.16 75)", "oklch(74% 0.14 75)", "oklch(84% 0.09 75)", "oklch(91% 0.05 75)", "oklch(97% 0.025 75)"] },
+      "safety": { "role": "secondary", "displayName": "Safety Emerald", "canonical": "#10B981", "tonalRamp": ["oklch(22% 0.07 160)", "oklch(34% 0.11 160)", "oklch(46% 0.14 160)", "oklch(58% 0.15 160)", "oklch(70% 0.12 160)", "oklch(82% 0.08 160)", "oklch(91% 0.04 160)", "oklch(97% 0.02 160)"] },
+      "app-bg": { "role": "neutral", "displayName": "App Mist", "canonical": "#F7F9FC", "tonalRamp": ["#0F172A", "#1F2937", "#334155", "#64748B", "#94A3B8", "#CBD5E1", "#E2E8F0", "#F7F9FC"] },
+      "surface": { "role": "neutral", "displayName": "Card White", "canonical": "#FFFFFF", "tonalRamp": ["#0F172A", "#1F2937", "#334155", "#64748B", "#94A3B8", "#E2E8F0", "#F8FAFC", "#FFFFFF"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Compact Display", "purpose": "Screen titles, welcome moments, and destination names." },
+      "headline": { "displayName": "Task Headline", "purpose": "Planner, active trip, detail sheet, and modal titles." },
+      "title": { "displayName": "Card Title", "purpose": "Cards, list rows, section titles, and service names." },
+      "body": { "displayName": "Thai-Readable Body", "purpose": "Descriptions, instructions, and route support copy." },
+      "label": { "displayName": "Extra-Bold Label", "purpose": "Buttons, chips, tabs, badges, and state labels." },
+      "mono": { "displayName": "Trip Fact Mono", "purpose": "Coordinates, timers, route facts, prices, and technical details." }
+    },
+    "shadows": [
+      { "name": "primary-lift", "value": "0 10px 25px var(--app-primary-shadow)", "purpose": "High-priority blue controls and selected action emphasis." },
+      { "name": "navigation-float", "value": "0 -10px 30px rgba(15, 23, 42, 0.10)", "purpose": "Floating bottom navigation and fixed action bars." },
+      { "name": "sheet-lift", "value": "0 -12px 30px rgba(15, 23, 42, 0.08)", "purpose": "Bottom sheets and detail action bars." },
+      { "name": "card-whisper", "value": "0 4px 20px rgba(15, 23, 42, 0.03)", "purpose": "Quiet card grouping without heavy desktop depth." }
+    ],
+    "motion": [
+      { "name": "state-fast", "value": "150ms cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Tap, hover, focus, and chip selection feedback." },
+      { "name": "sheet-standard", "value": "250ms cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Bottom sheet and modal movement that must remain responsive." },
+      { "name": "reduced-motion", "value": "prefers-reduced-motion: reduce", "purpose": "Disable pulses, pings, bounces, and non-essential transforms." }
+    ],
+    "breakpoints": [
+      { "name": "app-shell", "value": "480px" },
+      { "name": "compact-scale", "value": "14px root font size" },
+      { "name": "normal-scale", "value": "15.5px root font size" },
+      { "name": "comfortable-scale", "value": "16.5px root font size" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The default high-priority mobile action button.",
+      "html": "<button class=\"ds-btn-primary\">Create trip plan</button>",
+      "css": ".ds-btn-primary { min-height: 42px; border: 0; border-radius: 16px; padding: 12px 16px; background: var(--app-primary, #1E5BFF); color: #fff; font-family: Prompt, ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 800; box-shadow: 0 10px 25px var(--app-primary-shadow, rgba(30,91,255,.3)); cursor: pointer; transition: transform 150ms cubic-bezier(.22,1,.36,1), background-color 150ms cubic-bezier(.22,1,.36,1); } .ds-btn-primary:hover { background: var(--app-primary-dark, #173FCC); } .ds-btn-primary:active { transform: scale(.98); } .ds-btn-primary:focus-visible { outline: 0; box-shadow: 0 0 0 3px var(--app-primary-soft, #DBEAFE), 0 10px 25px var(--app-primary-shadow, rgba(30,91,255,.3)); }"
+    },
+    {
+      "name": "Soft Button",
+      "kind": "button",
+      "refersTo": "button-soft",
+      "description": "Secondary action with the same route identity but lower urgency.",
+      "html": "<button class=\"ds-btn-soft\">View on map</button>",
+      "css": ".ds-btn-soft { min-height: 42px; border: 1px solid var(--app-primary-soft, #DBEAFE); border-radius: 16px; padding: 12px 16px; background: var(--app-primary-light, #EFF6FF); color: var(--app-primary, #1E5BFF); font-family: Prompt, ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; transition: transform 150ms cubic-bezier(.22,1,.36,1), background-color 150ms cubic-bezier(.22,1,.36,1); } .ds-btn-soft:hover { background: #DBEAFE; } .ds-btn-soft:active { transform: scale(.98); } .ds-btn-soft:focus-visible { outline: 0; box-shadow: 0 0 0 3px var(--app-primary-soft, #DBEAFE); }"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "The rounded route and place search field used on home and map surfaces.",
+      "html": "<label class=\"ds-search\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg><input placeholder=\"Where would you like to go?\" /></label>",
+      "css": ".ds-search { height: 42px; display: flex; align-items: center; gap: 10px; border: 1px solid #E2E8F0; border-radius: 22px; background: #fff; padding: 0 16px; color: #94A3B8; font-family: Prompt, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 1px 2px rgba(15,23,42,.04); transition: box-shadow 150ms cubic-bezier(.22,1,.36,1), border-color 150ms cubic-bezier(.22,1,.36,1); } .ds-search:focus-within { border-color: var(--app-primary, #1E5BFF); box-shadow: 0 0 0 4px var(--app-primary-soft, #DBEAFE); } .ds-search svg { width: 20px; height: 20px; flex: 0 0 auto; } .ds-search input { width: 100%; border: 0; outline: 0; background: transparent; color: #0F172A; font-size: 14px; font-weight: 700; font-family: inherit; } .ds-search input::placeholder { color: #64748B; opacity: 1; }"
+    },
+    {
+      "name": "Selected Chip",
+      "kind": "chip",
+      "refersTo": "chip-selected",
+      "description": "The compact selected state for interests, filters, and route categories.",
+      "html": "<button class=\"ds-chip-selected\">Local food</button>",
+      "css": ".ds-chip-selected { border: 0; border-radius: 12px; padding: 6px 12px; background: var(--app-primary, #1E5BFF); color: #fff; font-family: Prompt, ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 800; box-shadow: 0 4px 12px var(--app-primary-shadow, rgba(30,91,255,.3)); cursor: pointer; transition: transform 150ms cubic-bezier(.22,1,.36,1); } .ds-chip-selected:active { transform: scale(.98); } .ds-chip-selected:focus-visible { outline: 0; box-shadow: 0 0 0 3px var(--app-primary-soft, #DBEAFE), 0 4px 12px var(--app-primary-shadow, rgba(30,91,255,.3)); }"
+    },
+    {
+      "name": "Default Card",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "The quiet white surface used for planner cards, marketplace previews, and profile rows.",
+      "html": "<article class=\"ds-card\"><strong>Phichai cultural route</strong><p>Safe local stops, OTOP goods, and route context in one compact card.</p></article>",
+      "css": ".ds-card { border: 1px solid #E2E8F0; border-radius: 22px; background: #fff; color: #0F172A; padding: 14px; font-family: Prompt, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 4px 20px rgba(15,23,42,.03); } .ds-card strong { display: block; font-size: 14px; line-height: 1.25; font-weight: 800; } .ds-card p { margin: 6px 0 0; color: #64748B; font-size: 12px; line-height: 1.55; font-weight: 600; }"
+    },
+    {
+      "name": "Bottom Navigation Shell",
+      "kind": "nav",
+      "refersTo": "bottom-navigation",
+      "description": "The floating safe-area aware tab bar that anchors the mobile app.",
+      "html": "<nav class=\"ds-bottom-nav\"><span class=\"is-active\">Home</span><span>Plan</span><span>Map</span><span>Taxi</span><span>Profile</span></nav>",
+      "css": ".ds-bottom-nav { display: flex; align-items: center; justify-content: space-between; gap: 6px; border: 1px solid rgba(255,255,255,.7); border-radius: 32px; background: rgba(255,255,255,.95); padding: 8px 12px; box-shadow: 0 -10px 30px rgba(15,23,42,.10); font-family: Prompt, ui-sans-serif, system-ui, sans-serif; backdrop-filter: blur(18px); } .ds-bottom-nav span { flex: 1; text-align: center; color: #94A3B8; font-size: 10px; line-height: 1.1; font-weight: 800; padding: 8px 4px; border-radius: 16px; } .ds-bottom-nav .is-active { color: var(--app-primary, #1E5BFF); background: var(--app-primary-light, #EFF6FF); }"
+    },
+    {
+      "name": "Safety Notice",
+      "kind": "custom",
+      "refersTo": "safety-notice",
+      "description": "The semantic emerald safety pattern for active monitoring, verified state, and route reassurance.",
+      "html": "<section class=\"ds-safety\"><span class=\"ds-safety-icon\">!</span><div><strong>Safe Mode is active</strong><p>Location sharing and emergency contacts stay close while you travel.</p></div></section>",
+      "css": ".ds-safety { display: flex; gap: 12px; align-items: flex-start; border: 1px solid #A7F3D0; border-radius: 22px; background: #ECFDF5; color: #065F46; padding: 14px; font-family: Prompt, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 4px 15px rgba(16,185,129,.03); } .ds-safety-icon { width: 38px; height: 38px; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; background: #10B981; color: #fff; font-weight: 900; flex: 0 0 auto; } .ds-safety strong { display: block; font-size: 12px; font-weight: 900; line-height: 1.2; } .ds-safety p { margin: 4px 0 0; font-size: 11px; line-height: 1.55; font-weight: 700; color: rgba(4,120,87,.9); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Community Route Kit",
+    "overview": "Tong Dee Go is a compact mobile toolkit for planning, moving, and feeling safe around Phichai. The interface should feel assembled for a real day out: route cards, map sheets, local service entries, safety notices, and marketplace previews all share one tactile vocabulary rather than becoming separate mini-brands. The system is product-first and Thai-first. It uses familiar mobile controls, tight hierarchy, and clear status language so users can act while walking, riding, or checking a route. Warmth comes from local content, amber cultural cues, and community services, not from generic travel decoration. It explicitly rejects generic tourism templates, placeless blue-and-white polish, government-portal stiffness, and decorative AI sparkle that weakens trust.",
+    "keyCharacteristics": [
+      "Mobile app shell capped at 480px with safe-area aware bottom navigation.",
+      "Restrained blue primary system with amber culture and emerald safety accents.",
+      "Rounded, thumb-first controls with compact density and soft structural elevation.",
+      "Thai-readable Prompt typography, with JetBrains Mono reserved for coordinates, numbers, codes, and technical details.",
+      "Local specificity in content, imagery, labels, service names, and route context."
+    ],
+    "rules": [
+      { "name": "The Blue Earns the Tap Rule", "body": "Tongdee Blue is for action, selection, current location, and focus. Do not spend it on decoration that is not actionable or stateful.", "section": "colors" },
+      { "name": "The Local Warmth Rule", "body": "Amber and orange mark culture, food, marketplace, and reward. They should make Phichai feel specific, never turn the whole app into a generic vacation palette.", "section": "colors" },
+      { "name": "The Safety Is Semantic Rule", "body": "Emerald means safety, success, verified, or completed. Never use emerald as arbitrary visual variety.", "section": "colors" },
+      { "name": "The Thai Legibility Rule", "body": "Thai copy must not be compressed into decorative tracking or ultra-light weights. Use weight and spacing for hierarchy, not letter-spaced novelty.", "section": "typography" },
+      { "name": "The Mono Has a Job Rule", "body": "JetBrains Mono is for facts and coordinates. Do not use it for brand flavor in ordinary labels.", "section": "typography" },
+      { "name": "The Soft Lift Rule", "body": "Shadows should feel like mobile affordance, not desktop depth. If a card looks heavier than the bottom nav, the shadow is too strong.", "section": "elevation" },
+      { "name": "The Border First Rule", "body": "Default containers get a hairline border before they get a shadow. Use elevation when the user must understand stacking or tap priority.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do preserve `--app-primary` as the action/selection color and route all preset accents through the existing appearance system.",
+      "Do design for one-handed mobile use: 42px minimum control height, 16px page gutters, safe-area aware fixed controls, and clear back/escape affordances.",
+      "Do make local specificity visible with Phichai place names, service context, route copy, local operators, and cultural detail.",
+      "Do pair color with labels or icons for safety, selected, completed, warning, and error states.",
+      "Do keep motion short and functional: 150-250ms for state transitions, longer only for map/sheet gestures that track touch.",
+      "Do test muted text and placeholders against App Mist and blue-wash surfaces before shipping."
+    ],
+    "donts": [
+      "Don't make the app feel like a generic tourism template with interchangeable attraction cards, stock travel language, or placeless blue-and-white polish.",
+      "Don't make it feel like a government portal: avoid bureaucratic stiffness, form-heavy dead ends, and overly official tone.",
+      "Don't over-index on decorative AI sparkle at the expense of trust, legibility, and real trip utility.",
+      "Don't use side-stripe borders (`border-left` or `border-right` greater than 1px) as a card or callout accent. Use full borders, background tint, icon/label structure, or timeline-specific geometry instead.",
+      "Don't use gradient text. Tongdee Go uses solid text color, weight, and placement for emphasis.",
+      "Don't create nested card stacks. Use spacing, dividers, or a single clear surface.",
+      "Don't use arbitrary z-index numbers. Keep layers semantic: dropdown/search results above fields, sticky headers above content, modals above sheets, toast above modal, tooltip above toast."
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Remix: THAI  GO MAP NEWER UI TEST",
+  "description": "เที่ยวเมืองรอง เข้าใจวัฒนธรรม ด้วย AI - พาสปอร์ตท่องเที่ยวดิจิทัลและเพื่อนคุยท่องเที่ยวในเมืองพิชัย",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
