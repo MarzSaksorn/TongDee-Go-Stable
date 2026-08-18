@@ -459,7 +459,7 @@ export default function HomeView({
           </div>
           <button
             type="button"
-            onClick={() => onOpenPlaceInMapDetail?.(recommendedPlaces[0]?.id || "")}
+            onClick={() => onOpenScreen?.(8)}
             className="flex items-center gap-1 text-[11px] font-semibold text-primary hover:text-primary/80 transition-colors cursor-pointer"
           >
             {language === "TH" ? "ดูทั้งหมด" : "See all"}
