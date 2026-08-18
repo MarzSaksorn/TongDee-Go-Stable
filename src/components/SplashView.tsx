@@ -1,27 +1,13 @@
-import React, { useRef, useEffect } from "react";
-import gsap from "gsap";
+import React from "react";
 import ThongdeeGoLogo from "./ThongdeeGoLogo";
 
 interface SplashViewProps {
   onNext: () => void;
 }
 
-export default function SplashView({ onNext }: SplashViewProps) {
-  const logoRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const sloganRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
+const revealDelay = (index: number) => ({ animationDelay: `${index * 180}ms` });
 
-  useEffect(() => {
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-    tl.from(logoRef.current, { scale: 0.3, opacity: 0, rotation: -8, duration: 0.8 })
-      .from(titleRef.current, { y: 30, opacity: 0, duration: 0.6 }, "-=0.3")
-      .from(subtitleRef.current, { y: 20, opacity: 0, duration: 0.5 }, "-=0.3")
-      .from(sloganRef.current, { opacity: 0, scale: 0.85, duration: 0.5 }, "-=0.2")
-      .from(ctaRef.current, { y: 40, opacity: 0, duration: 0.6 }, "-=0.2");
-    return () => { tl.kill(); };
-  }, []);
+export default function SplashView({ onNext }: SplashViewProps) {
 
   return (
     <div
@@ -35,23 +21,23 @@ export default function SplashView({ onNext }: SplashViewProps) {
       <div />
 
       <div className="flex flex-col items-center text-center z-10">
-        <div ref={logoRef}>
+        <div className="animate-fade-in-up" style={revealDelay(0)}>
           <ThongdeeGoLogo size={140} showBg={true} className="mb-6 rounded-3xl border-4 border-amber-400/80 shadow-2xl shadow-black/60" />
         </div>
-        <h1 ref={titleRef} className="text-7xl font-extrabold tracking-wider font-sans mb-2 drop-shadow-md">
+        <h1 className="animate-fade-in-up text-7xl font-extrabold tracking-wider font-sans mb-2 drop-shadow-md" style={revealDelay(1)}>
           ทองดี <span className="text-amber-400">โก</span>
         </h1>
-        <p ref={subtitleRef} className="text-sm font-light text-primary-foreground/80 uppercase tracking-widest max-w-[280px]">
+        <p className="animate-fade-in-up text-sm font-light text-primary-foreground/80 uppercase tracking-widest max-w-[280px]" style={revealDelay(2)}>
           DIGITAL CULTURE & TOURISM
         </p>
-        <div ref={sloganRef} className="mt-8 px-4 py-2 bg-primary-foreground/10 rounded-full border border-primary-foreground/15 backdrop-blur-sm">
+        <div className="animate-fade-in-up mt-8 px-4 py-2 bg-primary-foreground/10 rounded-full border border-primary-foreground/15 backdrop-blur-sm" style={revealDelay(3)}>
           <p className="text-xs font-medium text-amber-300">
             &ldquo;เที่ยวเมืองรอง เข้าใจวัฒนธรรม ด้วย AI&rdquo;
           </p>
         </div>
       </div>
 
-      <div ref={ctaRef} className="w-full flex flex-col items-center z-10">
+      <div className="animate-fade-in-up w-full flex flex-col items-center z-10" style={revealDelay(4)}>
         <button
           id="btn-splash-continue"
           onClick={onNext}
