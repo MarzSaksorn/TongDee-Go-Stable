@@ -56,7 +56,7 @@ export default function TravelDiaryView({
       className="flex flex-col h-full w-full bg-background pb-16 overflow-y-auto animate-fade-in-up"
     >
       {/* Editorial Header */}
-      <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-5 pt-6 rounded-b-[32px] relative">
+      <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-5 pt-12 rounded-b-[32px] relative safe-bleed">
         <div className="absolute top-4 left-4 z-40">
           <button 
             type="button"
@@ -130,7 +130,7 @@ export default function TravelDiaryView({
             ) : (
               <div className="py-6 flex flex-col items-center justify-center text-center text-muted-foreground/70 text-xs">
                 <span>ยังไม่มีเรื่องราว เนื่องจากยังไม่ได้เริ่มเช็กอินสถานที่ใดๆ</span>
-                <p className="text-[10px] text-gray-300 mt-1">กรุณากดจำลอง QR Check-in หรือสะสมเพิ่มแสตมป์สิทธิ์</p>
+                <p className="text-[10px] text-gray-300 mt-1">กรุณาเช็คอินผ่าน LINE OA หรือสะสมแสตมป์จากหน้าพาสปอร์ต</p>
               </div>
             )}
 

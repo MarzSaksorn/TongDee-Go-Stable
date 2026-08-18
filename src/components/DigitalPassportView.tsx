@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import gsap from "gsap";
-import { Award, Compass, Star, Mic, Flame, Shield, Globe, Landmark, Smile, Sparkles, ChevronLeft, Lock, QrCode, BookOpen, CheckCircle2 } from "lucide-react";
+import { Award, Compass, Star, Mic, Flame, Shield, Globe, Landmark, Smile, Sparkles, ChevronLeft, Lock, MessageCircle, BookOpen, CheckCircle2, Wrench } from "lucide-react";
 import { Badge, Stamp } from "../types";
 import { STAMPS } from "../data";
 
@@ -105,7 +105,10 @@ export default function DigitalPassportView({
           onClick={onOpenQRCheckIn}
           className="py-3 px-3 bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all rounded-2xl flex items-center justify-center gap-2 font-bold text-xs text-primary-foreground shadow-md shadow-blue-500/10 cursor-pointer border-none"
         >
-          <QrCode className="w-4 h-4" /> ไปสแกน QR เช็คอิน
+          <MessageCircle className="w-4 h-4" /> LINE OA เช็คอิน
+          <span className="inline-flex items-center gap-0.5 bg-amber-300 text-primary text-[8px] font-extrabold px-1.5 py-0.5 rounded-full">
+            <Wrench className="w-2.5 h-2.5" /> กำลังพัฒนา
+          </span>
         </button>
         <button
           onClick={onOpenDiary}

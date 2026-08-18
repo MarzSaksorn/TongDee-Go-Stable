@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Camera, ChevronLeft, Check, Sparkles, MapPin, Award, AlertCircle } from "lucide-react";
+import { Camera, ChevronLeft, Check, Sparkles, MapPin, Award, AlertCircle, MessageCircle, Wrench } from "lucide-react";
 import { Attraction } from "../types";
 import { ATTRACTIONS } from "../data";
 
@@ -24,7 +24,7 @@ export default function QRCheckInView({
   const handleSimulateScan = () => {
     setScanning(true);
     setSuccess(null);
-    
+
     setTimeout(() => {
       setScanning(false);
       onCheckInSuccess(selectedPlaceId);
@@ -44,61 +44,68 @@ export default function QRCheckInView({
     >
       {/* Header */}
       <div className="flex items-center gap-3 p-4 bg-card border-b border-border shadow-lg sticky top-0 z-20">
-        <button 
+        <button
           onClick={onBack}
           className="p-1.5 hover:bg-muted active:scale-95 text-muted-foreground rounded-xl transition-all cursor-pointer shrink-0"
           title="ย้อนกลับ"
         >
-          <ChevronLeft className="w-5 h-5 text-white" />
+          <ChevronLeft className="w-5 h-5 text-foreground" />
         </button>
         <div className="min-w-0">
-          <h2 className="text-sm font-bold text-white leading-tight truncate">สแกน QR คาร์ดโบราณสถาน</h2>
-          <span className="text-[10px] text-muted-foreground/70 font-mono block truncate">ระบบตรวจสอบตำแหน่งภูมิศาสตร์ออแกนิก</span>
+          <h2 className="text-sm font-bold text-foreground leading-tight truncate">LINE OA แอดไลน์สะสมแสตมป์</h2>
+          <span className="text-[10px] text-muted-foreground/70 font-mono block truncate">ผ่าน LINE Official Account • กำลังพัฒนา</span>
         </div>
       </div>
 
       <div className="p-5 flex-1 flex flex-col justify-between space-y-6">
-        {/* Main Scanner Emulator HUD */}
-        <div className="relative w-full aspect-square max-w-[280px] mx-auto bg-muted border-2 border-border rounded-[32px] overflow-hidden flex flex-col items-center justify-center shadow-2xl p-4">
-          
-          {/* Scanning box indicator corners */}
-          <div className="absolute top-8 left-8 w-10 h-10 rounded-xl ring-2 ring-amber-400/90" />
-          <div className="absolute top-8 right-8 w-10 h-10 rounded-xl ring-2 ring-amber-400/90" />
-          <div className="absolute bottom-8 left-8 w-10 h-10 rounded-xl ring-2 ring-amber-400/90" />
-          <div className="absolute bottom-8 right-8 w-10 h-10 rounded-xl ring-2 ring-amber-400/90" />
+        {/* LINE OA Card */}
+        <div className="relative w-full bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-[32px] overflow-hidden shadow-2xl p-6 flex flex-col items-center text-white">
+          <div className="absolute top-[-20%] right-[-15%] w-44 h-44 rounded-full bg-white/10 blur-xl pointer-events-none" />
+          <div className="absolute bottom-[-15%] left-[-10%] w-32 h-32 rounded-full bg-white/10 blur-lg pointer-events-none" />
 
-          {/* Glowing scanner red line */}
-          {scanning && (
-            <div className="absolute left-6 right-6 h-1 bg-rose-500 shadow-[0_0_12px_#ef4444] animate-pulse z-10" />
-          )}
+          <div className="relative z-10 flex flex-col items-center gap-3 text-center w-full">
+            <div className="inline-flex items-center gap-2 bg-emerald-950/20 border border-emerald-900/20 px-3.5 py-1.5 rounded-full">
+              <MessageCircle className="w-4 h-4" />
+              <span className="text-[11px] font-extrabold tracking-wide">LINE Official Account</span>
+            </div>
 
-          {scanning ? (
-            <div className="flex flex-col items-center gap-2 text-center z-10 bg-black/40 backdrop-blur-sm p-4 rounded-2xl">
-              <Camera className="w-8 h-8 text-amber-400 animate-spin" />
-              <span className="text-xs font-bold text-amber-300">กำลังสแกนโค้ด OTOP...</span>
-              <p className="text-[9px] text-muted-foreground">ความปลอดภัยความแม่นยำสูง</p>
+            <div className="text-2xl font-black tracking-widest drop-shadow-sm">@thongdeego</div>
+
+            {/* QR placeholder */}
+            <div className="relative mt-1 bg-white p-4 rounded-2xl shadow-lg">
+              <div className="grid grid-cols-7 gap-0.5 w-36 h-36">
+                {Array.from({ length: 49 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={i % 3 === 0 || i % 5 === 0 ? "bg-emerald-950" : "bg-white"}
+                  />
+                ))}
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="bg-white/85 backdrop-blur-sm text-emerald-700 text-[9px] font-extrabold px-3 py-1.5 rounded-full border border-emerald-200">
+                  QR กำลังพัฒนา
+                </span>
+              </div>
             </div>
-          ) : success ? (
-            <div className="flex flex-col items-center gap-2 text-center z-10 bg-emerald-500/10 border border-emerald-500/30 backdrop-blur-sm p-4 rounded-2xl animate-fade-in">
-              <Sparkles className="w-8 h-8 text-amber-400" />
-              <span className="text-xs font-bold text-emerald-400">สแกนรหัสสำเร็จ!</span>
-              <p className="text-[10px] font-semibold text-white truncate max-w-[190px]">{success}</p>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center gap-3 text-center z-10 p-5">
-              <Camera className="w-8 h-8 text-muted-foreground" />
-              <span className="text-xs font-bold text-muted-foreground font-sans">เล็งกล้องไปที่ป้ายคิวอาร์แสตมป์</span>
-              <p className="text-[9px] text-muted-foreground/70 max-w-[180px]">มีแผงสิทธิ์ป้ายคิวอาร์สีทองพาสปอร์ตติดตั้งทุกๆ เช็คพอยต์</p>
-            </div>
-          )}
+
+            <p className="text-[11px] font-semibold text-white/90 leading-relaxed max-w-[250px]">
+              สแกน QR ด้วยแอป LINE เพื่อแอดไลน์ <span className="font-extrabold">@thongdeego</span>
+              แล้วรับสิทธิ์เช็คอินแสตมป์พาสปอร์ตดิจิทัลได้เลย
+            </p>
+
+            <span className="inline-flex items-center gap-1.5 bg-amber-300 text-emerald-950 text-[9px] font-extrabold px-3 py-1 rounded-full">
+              <Wrench className="w-3 h-3" />
+              In Development • กำลังพัฒนา
+            </span>
+          </div>
         </div>
 
-        {/* Location Dropdown selector for mock scanner */}
+        {/* Dev simulation (kept so stamps can still be collected) */}
         <div className="space-y-3 bg-muted/60 p-4 rounded-xl border border-border">
           <label className="block text-xs font-medium text-muted-foreground font-sans">
-            <MapPin className="w-3.5 h-3.5 inline-block mr-1" /> เลือกสถานที่เช็กอินจำลอง
+            <MapPin className="w-3.5 h-3.5 inline-block mr-1" /> เลือกสถานที่เช็กอินจำลอง (โหมดนักพัฒนา)
           </label>
-          
+
           <select
             value={selectedPlaceId}
             onChange={(e) => {
@@ -114,15 +121,28 @@ export default function QRCheckInView({
             ))}
           </select>
 
-          {/* Trigger check-in action button */}
           <button
             onClick={handleSimulateScan}
             disabled={scanning}
             className="w-full py-3.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:opacity-95 active:scale-95 transition-all text-primary text-xs font-extrabold rounded-xl shadow-lg shadow-amber-500/10 flex justify-center items-center gap-2"
           >
             <Sparkles className="w-4 h-4 fill-primary" />
-            <span>{scanning ? "โปรดดึงกล้องค้างไว้..." : "จำลองการสแกนรหัส QR"}</span>
+            <span>{scanning ? "โปรดดึงกล้องค้างไว้..." : "จำลองเช็คอินผ่าน LINE OA"}</span>
           </button>
+
+          {scanning && (
+            <div className="flex items-center gap-2 text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
+              <Camera className="w-3.5 h-3.5 animate-pulse" />
+              กำลังจำลองการแอดไลน์และเช็คอิน...
+            </div>
+          )}
+
+          {success && !scanning && (
+            <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2 animate-fade-in">
+              <Check className="w-3.5 h-3.5" />
+              เช็คอินสำเร็จ: {success}
+            </div>
+          )}
         </div>
 
         {/* Dynamic Badge unlock hints */}
