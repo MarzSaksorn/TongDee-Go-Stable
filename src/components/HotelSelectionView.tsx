@@ -5,7 +5,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Accommodation } from "../types";
 import { useLanguage } from "../i18n/LanguageContext";
 import { getDistanceKm, formatDistanceKm } from "../utils/distance";
-import { useToast } from "./ToastProvider";
 gsap.registerPlugin(ScrollTrigger);
 
 const propertyTypeIcons: Record<string, React.ReactNode> = {
@@ -58,7 +57,6 @@ export default function HotelSelectionView({
   onSelectAccommodation,
 }: HotelSelectionViewProps) {
   const { language } = useLanguage();
-  const { showToast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [activePropertyType, setActivePropertyType] = useState("ทั้งหมด");
 
@@ -234,8 +232,6 @@ export default function HotelSelectionView({
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
-                        const isNowSaved = savedItems.some((s) => s.kind === "hotel" && s.id === item.id);
-                        showToast(isNowSaved ? "ลบออกจากรายการบันทึกแล้ว" : "บันทึกที่พักแล้ว", "success");
                         onToggleSave?.("hotel", item.id);
                       }}
                       className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center border shadow-md backdrop-blur-md transition-all active:scale-90 cursor-pointer z-10 ${

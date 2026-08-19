@@ -4,7 +4,6 @@ import { Accommodation } from "../types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getDistanceKm, formatDistanceKm } from "../utils/distance";
-import { useToast } from "./ToastProvider";
 
 interface AccommodationDetailViewProps {
   accommodation: Accommodation;
@@ -52,7 +51,6 @@ export default function AccommodationDetailView({
 }: AccommodationDetailViewProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showPhone, setShowPhone] = useState(false);
-  const { showToast } = useToast();
 
   const images = accommodation.images.length > 0
     ? accommodation.images
@@ -109,10 +107,7 @@ export default function AccommodationDetailView({
       <div className="absolute top-[calc(12px+env(safe-area-inset-top))] right-4 z-40">
         <button
           type="button"
-          onClick={() => {
-            showToast(isSaved ? "ลบออกจากรายการบันทึกแล้ว" : "บันทึกที่พักแล้ว", "success");
-            onToggleSave?.();
-          }}
+          onClick={() => onToggleSave?.()}
           className={`w-9 h-9 rounded-full flex items-center justify-center border shadow-md backdrop-blur-md transition-all active:scale-90 cursor-pointer ${
             isSaved
               ? "bg-amber-400 border-amber-300 text-foreground"
