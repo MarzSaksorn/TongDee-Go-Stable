@@ -41,7 +41,7 @@ export default function PlaceDetailView({
   const [justCheckedIn, setJustCheckedIn] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [videoTime, setVideoTime] = useState(0);
   const [videoDuration, setVideoDuration] = useState(0);
 
@@ -173,7 +173,6 @@ export default function PlaceDetailView({
               src={place.video_url || place.videoUrl || undefined}
               poster={place.image_url || place.imageUrl || place.image}
               className="w-full h-full object-cover place-hero-media"
-              autoPlay
               muted={isVideoMuted}
               loop
               playsInline
@@ -193,6 +192,20 @@ export default function PlaceDetailView({
           )}
           <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+
+          {/* Manual start: center play button until the user taps */}
+          {hasVideo && !isVideoPlaying && (
+            <button
+              type="button"
+              onClick={toggleVideoPlay}
+              aria-label="เล่นวิดีโอ"
+              className="absolute inset-0 z-10 flex items-center justify-center cursor-pointer bg-black/15"
+            >
+              <div className="w-16 h-16 rounded-full bg-black/50 backdrop-blur-md border border-white/30 flex items-center justify-center text-white hover:bg-black/65 transition-all">
+                <Play className="w-7 h-7 ml-1" />
+              </div>
+            </button>
+          )}
 
           {/* Mute toggle for video */}
           {hasVideo && (
