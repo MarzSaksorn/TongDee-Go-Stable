@@ -117,7 +117,7 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
 
       const { data, error } = await supabase
         .from("user_settings")
-        .select("primary_accent, custom_primary_color, use_custom_primary_color, ui_scale, compact_mode, dark_mode")
+        .select("primary_accent, custom_primary_color, use_custom_primary_color, ui_scale, compact_mode")
         .eq("user_id", user.id)
         .maybeSingle();
 
@@ -148,7 +148,7 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
           dbScale = "normal";
         }
 
-        const dbDarkMode = data.dark_mode ?? false;
+        const dbDarkMode = localStorage.getItem("tongdee_dark_mode") === "true";
 
         setAccentState(dbAccent);
         setCustomPrimaryColorState(dbCustomColor);
@@ -181,7 +181,6 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
     use_custom_primary_color?: boolean;
     ui_scale?: UIScale;
     compact_mode?: boolean;
-    dark_mode?: boolean;
   }) => {
     const { data: sessionData } = await supabase.auth.getSession();
     const user = sessionData.session?.user;
@@ -321,14 +320,6 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
   const setDarkMode = async (nextDarkMode: boolean) => {
     setDarkModeState(nextDarkMode);
     localStorage.setItem("tongdee_dark_mode", String(nextDarkMode));
-
-    try {
-      await saveToDatabase({
-        dark_mode: nextDarkMode
-      });
-    } catch (err) {
-      console.warn("Could not sync dark mode to online DB.");
-    }
   };
 
   const resetAppearance = async () => {
@@ -350,8 +341,7 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
         custom_primary_color: DEFAULT_CUSTOM_COLOR,
         use_custom_primary_color: false,
         ui_scale: "compact",
-        compact_mode: true,
-        dark_mode: false
+        compact_mode: true
       });
     } catch (err) {
       console.warn("Could not sync format resets to online DB.");
