@@ -249,9 +249,9 @@ export default function AuthScreens({
 
             <button 
               onClick={onContinueAsGuest}
-              className="w-full py-3 hover:text-muted-foreground active:scale-95 text-muted-foreground/60 text-xs font-bold transition-all text-center underline cursor-pointer"
+              className="w-full py-3.5 bg-primary/10 hover:bg-primary/15 border border-primary/30 text-primary active:scale-[0.98] text-sm font-bold transition-all text-center rounded-2xl cursor-pointer"
             >
-              ใช้งานแบบไม่เข้าสู่ระบบ (ใช้งานทั่วไป)
+              ทดลองใช้งาน
             </button>
           </div>
 
