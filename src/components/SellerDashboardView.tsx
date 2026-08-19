@@ -29,6 +29,8 @@ export default function SellerDashboardView({ onBack, sellerProfile }: SellerDas
   const [isSavingShop, setIsSavingShop] = useState(false);
   const { showToast } = useToast();
   const [isActive, setIsActive] = useState<boolean>(() => Boolean(sellerProfile?.is_active));
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -91,6 +93,25 @@ export default function SellerDashboardView({ onBack, sellerProfile }: SellerDas
     } catch (err: any) {
       console.error("Failed to toggle shop active state:", err);
       showToast(`ดำเนินการไม่สำเร็จ: ${err?.message || ""}`, "error");
+    }
+  };
+
+  const handleDeleteShop = async () => {
+    if (!sellerProfile?.id) return;
+    setIsDeleting(true);
+    try {
+      const { error } = await supabase
+        .from('marketplace_sellers')
+        .delete()
+        .eq('id', sellerProfile.id);
+      if (error) throw error;
+      setIsDeleteConfirmOpen(false);
+      showToast("ลบร้านค้าเรียบร้อยแล้ว", "success");
+      onBack();
+    } catch (err: any) {
+      console.error("Failed to delete seller shop:", err);
+      showToast(`ลบไม่สำเร็จ: ${err?.message || ""}`, "error");
+      setIsDeleting(false);
     }
   };
 
@@ -282,7 +303,45 @@ export default function SellerDashboardView({ onBack, sellerProfile }: SellerDas
               </p>
             </>
           )}
+          {sellerProfile.verification_status === "approved" && (
+            <button
+              onClick={() => setIsDeleteConfirmOpen(true)}
+              className="w-full bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 text-xs font-bold py-2 rounded-xl border border-rose-400/40 transition-colors flex items-center justify-center gap-1"
+            >
+              <Trash2 className="w-3 h-3" /> ลบร้านค้า
+            </button>
+          )}
         </div>
+
+        {isDeleteConfirmOpen && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6">
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsDeleteConfirmOpen(false)} />
+            <div className="relative bg-card w-full max-w-[340px] rounded-2xl p-6 shadow-2xl border border-border animate-in fade-in zoom-in-95 duration-200">
+              <div className="w-12 h-12 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto mb-4">
+                <Trash2 className="w-6 h-6 text-destructive" />
+              </div>
+              <h3 className="text-sm font-extrabold text-foreground text-center mb-2">ลบร้านค้า?</h3>
+              <p className="text-[11px] text-muted-foreground text-center leading-relaxed mb-5">
+                สินค้าทั้งหมดของร้านจะถูกลบถาวรและไม่สามารถกู้คืนได้
+              </p>
+              <div className="flex gap-2.5">
+                <button
+                  onClick={() => setIsDeleteConfirmOpen(false)}
+                  className="flex-1 py-3 bg-muted text-foreground text-xs font-bold rounded-xl transition-all active:scale-95 cursor-pointer"
+                >
+                  ยกเลิก
+                </button>
+                <button
+                  onClick={handleDeleteShop}
+                  disabled={isDeleting}
+                  className="flex-1 py-3 bg-destructive text-white text-xs font-bold rounded-xl transition-all active:scale-95 cursor-pointer disabled:opacity-60"
+                >
+                  {isDeleting ? "กำลังลบ..." : "ลบถาวร"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-[calc(110px+env(safe-area-inset-bottom))]">

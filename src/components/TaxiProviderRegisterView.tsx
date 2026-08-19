@@ -17,6 +17,7 @@ import {
   Car,
   Luggage,
   Users,
+  Trash2,
 } from "lucide-react";
 import { supabase } from "../lib/supabaseClient";
 import { useToast } from "./ToastProvider";
@@ -54,6 +55,8 @@ export default function TaxiProviderRegisterView({ onBack }: TaxiProviderRegiste
   });
 
   const [isEditServiceModalOpen, setIsEditServiceModalOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [editFormData, setEditFormData] = useState({
     phone: "",
     serviceArea: "",
@@ -155,6 +158,25 @@ export default function TaxiProviderRegisterView({ onBack }: TaxiProviderRegiste
     } catch (e) {
       console.error("Failed to toggle service active state", e);
       showToast(tl("ดำเนินการไม่สำเร็จ", "Action failed"), "error");
+    }
+  };
+
+  const handleDeleteDriver = async () => {
+    if (!driverProfile) return;
+    setIsDeleting(true);
+    try {
+      const { error } = await supabase
+        .from("local_taxi_drivers")
+        .delete()
+        .eq("id", driverProfile.id);
+      if (error) throw error;
+      setIsDeleteConfirmOpen(false);
+      showToast(tl("ลบข้อมูลเรียบร้อยแล้ว", "Listing deleted"), "success");
+      onBack();
+    } catch (e) {
+      console.error("Failed to delete driver listing", e);
+      showToast(tl("ลบไม่สำเร็จ โปรดลองอีกครั้ง", "Failed to delete, please try again"), "error");
+      setIsDeleting(false);
     }
   };
 
@@ -410,7 +432,48 @@ export default function TaxiProviderRegisterView({ onBack }: TaxiProviderRegiste
               ? tl("รถของคุณจะหายไปจากรายการรถรับจ้างชั่วคราว", "Your taxi will be hidden from the taxi list until restored")
               : tl("รถของคุณจะแสดงในรายการรถรับจ้างอีกครั้ง", "Your taxi will appear in the taxi list again")}
           </p>
+
+          {/* Delete driver listing permanently */}
+          <button
+            onClick={() => setIsDeleteConfirmOpen(true)}
+            className="w-full flex items-center justify-center gap-2 bg-destructive text-white font-bold text-sm py-3.5 rounded-2xl active:scale-[0.98] transition-all cursor-pointer hover:bg-destructive/90"
+          >
+            <Trash2 className="w-4 h-4" />
+            {tl("ลบข้อมูลผู้ให้บริการ", "Delete driver listing")}
+          </button>
         </div>
+
+        {isDeleteConfirmOpen && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6">
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsDeleteConfirmOpen(false)} />
+            <div className="relative bg-card w-full max-w-[340px] rounded-2xl p-6 shadow-2xl border border-border animate-in fade-in zoom-in-95 duration-200">
+              <div className="w-12 h-12 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto mb-4">
+                <Trash2 className="w-6 h-6 text-destructive" />
+              </div>
+              <h3 className="text-sm font-extrabold text-foreground text-center mb-2">
+                {tl("ลบข้อมูลผู้ให้บริการ?", "Delete driver listing?")}
+              </h3>
+              <p className="text-[11px] text-muted-foreground text-center leading-relaxed mb-5">
+                {tl("ข้อมูลรถและประวัติการตรวจสอบทั้งหมดจะถูกลบถาวรและไม่สามารถกู้คืนได้", "All vehicle and verification data will be permanently deleted and cannot be restored.")}
+              </p>
+              <div className="flex gap-2.5">
+                <button
+                  onClick={() => setIsDeleteConfirmOpen(false)}
+                  className="flex-1 py-3 bg-muted text-foreground text-xs font-bold rounded-xl transition-all active:scale-95 cursor-pointer"
+                >
+                  {tl("ยกเลิก", "Cancel")}
+                </button>
+                <button
+                  onClick={handleDeleteDriver}
+                  disabled={isDeleting}
+                  className="flex-1 py-3 bg-destructive text-white text-xs font-bold rounded-xl transition-all active:scale-95 cursor-pointer disabled:opacity-60"
+                >
+                  {isDeleting ? tl("กำลังลบ...", "Deleting...") : tl("ลบถาวร", "Delete")}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {isEditServiceModalOpen && (
           <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center">
