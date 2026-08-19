@@ -3,7 +3,7 @@ import gsap from "gsap";
 import { supabase } from "../lib/supabaseClient";
 import { useLanguage } from "../i18n/LanguageContext";
 import {
-  Award, Compass, Shield, Globe, LogOut, Bookmark, Clock, Sparkles, PhoneCall,
+  Award, Compass, Shield, Globe, LogOut, Clock, Sparkles, PhoneCall,
   Calendar, Bell, Trash2, Edit3, AlertTriangle, ShieldCheck, Sliders, Key, X, Palette,
   User, Car, Package, Settings, Loader2, Moon, Sun, Bed
 } from "lucide-react";
@@ -270,13 +270,6 @@ export default function ProfileView({
             subtitle={language === "TH" ? "สะสมตราจากสถานที่ที่คุณไปเยือน" : "Collect stamps from places you visit"}
             onClick={() => { if (isGuest) onGuestFeatureLocked?.(); else onOpenPassport(); }}
             rightContent={isGuest ? <span className="text-[9px] text-muted-foreground font-bold">Locked</span> : <Badge variant="secondary" className="text-[9px] font-bold px-2 py-0.5 h-auto rounded-md">{language === "TH" ? `เช็คอินแล้ว ${checkInCount} แห่ง` : `${checkInCount} check-ins`}</Badge>}
-          />
-          <MenuRow
-            icon={iconBox("bg-pink-50 dark:bg-pink-500/20", "text-pink-500 dark:text-pink-400", <Bookmark className="size-5 fill-pink-50" />)}
-            title={language === "TH" ? "สถานที่ที่บันทึกไว้" : "Saved Places"}
-            subtitle={language === "TH" ? "ดูสถานที่ที่คุณฮีลใจและประทับใจ" : "View your saved places"}
-            onClick={() => { if (isGuest) onGuestFeatureLocked?.(); else if (onNavigateToScreen) onNavigateToScreen(4); }}
-            rightContent={isGuest ? <span className="text-[9px] text-muted-foreground font-bold">Locked</span> : <span className="text-[10px] text-muted-foreground font-bold">Saved 3</span>}
           />
           <MenuRow
             icon={iconBox("bg-purple-50 dark:bg-purple-500/20", "text-purple-600 dark:text-purple-400", <Clock className="size-5" />)}

@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
-import { ChevronLeft, Star, MapPin, Volume2, VolumeX, Navigation, Bookmark, BookOpen, Clock, AlertTriangle, Lightbulb, CheckCircle2, Sparkles, Play, Pause } from "lucide-react";
+import { ChevronLeft, Star, MapPin, Volume2, VolumeX, Navigation, BookOpen, Clock, AlertTriangle, Lightbulb, CheckCircle2, Sparkles, Play, Pause } from "lucide-react";
 import { Attraction } from "../types";
 import { getDistanceKm, formatDistanceKm } from "../utils/distance";
 
@@ -38,7 +38,6 @@ export default function PlaceDetailView({
   onWheel,
   userLocation
 }: PlaceDetailViewProps) {
-  const [isBookmarked, setIsBookmarked] = useState(false);
   const [justCheckedIn, setJustCheckedIn] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -245,25 +244,6 @@ export default function PlaceDetailView({
               </div>
             </>
           )}
-
-          {/* Bookmark button */}
-          <div className="absolute top-[calc(12px+env(safe-area-inset-top))] right-4 z-10">
-            <button 
-              onPointerDown={(event) => event.stopPropagation()}
-              onTouchStart={(event) => event.stopPropagation()}
-              onClick={(event) => {
-                event.stopPropagation();
-                setIsBookmarked(!isBookmarked);
-              }}
-              className={`w-9 h-9 rounded-full backdrop-blur-md flex items-center justify-center transition-all border ${
-                isBookmarked 
-                  ? "bg-amber-400 text-foreground border-amber-300" 
-                  : "bg-black/40 text-white border-white/10 hover:bg-black/60"
-              }`}
-            >
-              <Bookmark className={`w-4.5 h-4.5 ${isBookmarked ? "fill-amber-700" : ""}`} />
-            </button>
-          </div>
 
           {/* Title overlay (raised when video controls are shown) */}
           <div className={`absolute left-5 right-5 text-white ${hasVideo ? "bottom-20" : "bottom-4"}`}>

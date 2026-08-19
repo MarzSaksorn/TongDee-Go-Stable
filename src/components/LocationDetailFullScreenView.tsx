@@ -6,8 +6,6 @@ interface LocationDetailFullScreenViewProps {
   place: Attraction;
   onBack: () => void;
   onNavigate: (place: Attraction) => void;
-  onToggleSave?: (place: Attraction) => void;
-  isSaved?: boolean;
   backMode?: "home" | "map";
   displayName?: string;
   isCheckedIn?: boolean;
@@ -18,8 +16,6 @@ export default function LocationDetailFullScreenView({
   place,
   onBack,
   onNavigate,
-  onToggleSave,
-  isSaved = false,
   backMode = "home",
   displayName = "คุณแมว",
   isCheckedIn = false,
