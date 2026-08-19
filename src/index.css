@@ -107,6 +107,11 @@
 
 html {
   font-size: var(--app-font-size);
+  overscroll-behavior-x: none;
+}
+
+body {
+  overscroll-behavior-x: none;
 }
 
 html[data-ui-scale="compact"] {
@@ -451,9 +456,12 @@ html[data-ui-scale="comfortable"] {
 
 /* Global top clearance: keep screen content below the status bar. Padded on
    each screen root (inside the viewport) so full-bleed colored headers can
-   bleed back up into the padding with their own background — no visible band. */
+   bleed back up into the padding with their own background — no visible band.
+   overflow-x: hidden also stops overflow-y-auto roots from computing
+   overflow-x: auto and becoming horizontally pannable (blank page to the right). */
 #app-main-viewport > * {
   padding-top: calc(env(safe-area-inset-top) + 20px);
+  overflow-x: hidden;
 }
 
 /* Full-bleed colored headers extend back up into the screen's top padding.
