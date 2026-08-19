@@ -61,9 +61,10 @@ const AccommodationOwnerRegisterView = lazy(() => import("./components/Accommoda
 const AdminPanelView = lazy(() => import("./components/AdminPanelView"));
 const HotelSelectionView = lazy(() => import("./components/HotelSelectionView"));
 const ActiveTripView = lazy(() => import("./components/ActiveTripView"));
+const SavedPlacesView = lazy(() => import("./components/SavedPlacesView"));
 import { useLanguage } from "./i18n/LanguageContext";
 import { SCREENS, isGuestSafeScreen } from "./router/screens";
-import { addGuestCheckin, addGuestStamp, getGuestCheckins, clearGuestData } from "./services/guestStore";
+import { addGuestCheckin, addGuestStamp, getGuestCheckins, clearGuestData, getGuestSaved, addGuestSaved, removeGuestSaved } from "./services/guestStore";
 
 const CURRENT_SCREEN_KEY = "tongdee_current_screen";
 const SHOW_FLOATING_ASK_AI_BUTTON = false;
@@ -121,6 +122,7 @@ export default function App() {
   const [previousScreen, setPreviousScreen] = useState<number>(4);
   const [isHighDpiCompact, setIsHighDpiCompact] = useState<boolean>(true);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [savedItems, setSavedItems] = useState<{ id: string; kind: "place" | "hotel" }[]>([]);
 
   const [homeDetailPlaceId, setHomeDetailPlaceId] = useState<string | null>(null);
 
@@ -258,7 +260,29 @@ export default function App() {
           });
           setIsGuest(false);
 
-          // Fetch user's persistent stamp check-ins
+        const guestSaved = getGuestSaved();
+
+        // Migrate any guest-mode saved places/hotels into the account
+        if (guestSaved.length > 0) {
+          for (const item of guestSaved) {
+            try {
+              await supabase.from("saved_places").upsert({
+                user_id: session.user.id,
+                place_id: item.id,
+                kind: item.kind
+              }, { onConflict: "user_id,place_id" });
+            } catch (err) {
+              console.error("Failed to migrate guest saved item:", err);
+            }
+          }
+          setSavedItems((prev) => {
+            const merged = [...prev, ...guestSaved];
+            return Array.from(new Map(merged.map((m) => [`${m.kind}:${m.id}`, m])).values());
+          });
+          clearGuestData();
+        }
+
+        // Fetch user's persistent stamp check-ins
           const { data: dbCheckins } = await supabase
             .from("checkins")
             .select("place_id")
@@ -268,6 +292,20 @@ export default function App() {
             const checkinList = dbCheckins.map((c) => c.place_id);
             const merged = Array.from(new Set(["wat_mahathat", ...checkinList]));
             setCheckedInIds(merged);
+          }
+
+          // Fetch user's saved places & hotels
+          const { data: dbSaved } = await supabase
+            .from("saved_places")
+            .select("place_id, kind")
+            .eq("user_id", session.user.id);
+          if (dbSaved && dbSaved.length > 0) {
+            setSavedItems(
+              dbSaved.map((s) => ({
+                id: s.place_id,
+                kind: (s.kind === "hotel" ? "hotel" : "place") as "place" | "hotel"
+              }))
+            );
           }
 
           // Restore screen if restorable and saved, else default to Home (4)
@@ -287,6 +325,7 @@ export default function App() {
           if (guestCheckins.length > 0) {
             setCheckedInIds(guestCheckins);
           }
+          setSavedItems(getGuestSaved());
 
           const saved = getSavedScreen();
           if (saved !== null && isRestorableScreen(saved) && isGuestSafeScreen(saved)) {
@@ -381,6 +420,47 @@ export default function App() {
       saveCurrentScreen(currentScreen);
     }
   }, [currentScreen, isGuest]);
+
+  const toggleSaved = useCallback(async (kind: "place" | "hotel", id: string) => {
+    const alreadySaved = savedItems.some((item) => item.kind === kind && item.id === id);
+    setSavedItems((prev) =>
+      alreadySaved
+        ? prev.filter((item) => !(item.kind === kind && item.id === id))
+        : [...prev, { kind, id }]
+    );
+
+    try {
+      if (isGuest) {
+        if (alreadySaved) {
+          removeGuestSaved(id, kind);
+        } else {
+          addGuestSaved(id, kind);
+        }
+      } else {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.user) return;
+        if (alreadySaved) {
+          await supabase
+            .from("saved_places")
+            .delete()
+            .eq("user_id", session.user.id)
+            .eq("place_id", id)
+            .eq("kind", kind);
+        } else {
+          await supabase
+            .from("saved_places")
+            .upsert({ user_id: session.user.id, place_id: id, kind }, { onConflict: "user_id,place_id" });
+        }
+      }
+    } catch (err) {
+      console.error("Failed to update saved item:", err);
+      setSavedItems((prev) =>
+        alreadySaved
+          ? [...prev, { kind, id }]
+          : prev.filter((item) => !(item.kind === kind && item.id === id))
+      );
+    }
+  }, [savedItems, isGuest]);
 
   useEffect(() => {
     if (currentScreen === 8) {
@@ -874,6 +954,8 @@ export default function App() {
               <PlaceDetailView 
                 place={activePlace}
                 isCheckedIn={checkedInIds.includes(activePlace.id)}
+                isSaved={savedItems.some((s) => s.kind === "place" && s.id === activePlace.id)}
+                onToggleSave={() => toggleSaved("place", activePlace.id)}
                 onBack={() => {
                   if (previousScreen === 8) {
                     setCurrentScreen(8);
@@ -926,6 +1008,8 @@ export default function App() {
                   checkedInIds={checkedInIds}
                   onCheckIn={handlePlaceCheckIn}
                   displayName={currentUser?.name || "คุณแมว"}
+                  savedItems={savedItems}
+                  onToggleSave={toggleSaved}
                   pendingPlaceId={pendingMapPlaceId}
                   pendingAccommodationId={pendingMapAccommodationId}
                   pendingOpenMode={pendingMapOpenMode}
@@ -1058,6 +1142,8 @@ export default function App() {
                   if (updateError) throw updateError;
                 }}
                 onOpenAppearanceSettings={() => setCurrentScreen(25)}
+                savedCount={savedItems.length}
+                onOpenSavedPlaces={() => setCurrentScreen(30)}
               />
             )}
 
@@ -1154,8 +1240,32 @@ export default function App() {
               <HotelSelectionView
                 accommodations={accommodations}
                 userLocation={userLocation}
+                savedItems={savedItems}
+                onToggleSave={toggleSaved}
                 onBack={() => setCurrentScreen(4)}
                 onSelectAccommodation={handleHotelSelect}
+              />
+            )}
+
+            {currentScreen === 30 && (
+              <SavedPlacesView
+                savedItems={savedItems}
+                locations={locations}
+                accommodations={accommodations}
+                onToggleSave={toggleSaved}
+                onBack={() => setCurrentScreen(12)}
+                onOpenPlace={(placeId) => {
+                  setActivePlaceId(placeId);
+                  setPreviousScreen(30);
+                  setCurrentScreen(7);
+                }}
+                onOpenHotel={(accommodationId) => {
+                  setPendingMapAccommodationId(accommodationId);
+                  setPendingMapPlaceId(null);
+                  setPendingMapOpenMode("detail");
+                  setHasOpenedMap(true);
+                  setCurrentScreen(8);
+                }}
               />
             )}
 

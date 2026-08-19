@@ -40,6 +40,8 @@ interface ProfileViewProps {
   onEditProfile?: (newName: string) => Promise<void>;
   onOpenAppearanceSettings?: () => void;
   onOpenTodayTrip?: () => void;
+  savedCount?: number;
+  onOpenSavedPlaces?: () => void;
 }
 
 export default function ProfileView({
@@ -47,7 +49,7 @@ export default function ProfileView({
   isHighDpiCompact, onToggleHighDpi, safetyModeActive = true, onToggleSafety,
   onNavigateToScreen, isGuest = false, displayName = "สวัสดี คุณแมว",
   onGuestFeatureLocked, onLogout, onChangePassword, onEditProfile,
-  onOpenAppearanceSettings, onOpenTodayTrip
+  onOpenAppearanceSettings, onOpenTodayTrip, savedCount = 0, onOpenSavedPlaces
 }: ProfileViewProps) {
   const { language, setLanguage, t } = useLanguage();
   const { accent, setAccent, uiScale, setUiScale, darkMode, setDarkMode } = useAppearance();
@@ -274,9 +276,9 @@ export default function ProfileView({
           <MenuRow
             icon={iconBox("bg-pink-50 dark:bg-pink-500/20", "text-pink-500 dark:text-pink-400", <Bookmark className="size-5 fill-pink-50" />)}
             title={language === "TH" ? "สถานที่ที่บันทึกไว้" : "Saved Places"}
-            subtitle={language === "TH" ? "ดูสถานที่ที่คุณฮีลใจและประทับใจ" : "View your saved places"}
-            onClick={() => { if (isGuest) onGuestFeatureLocked?.(); else if (onNavigateToScreen) onNavigateToScreen(4); }}
-            rightContent={isGuest ? <span className="text-[9px] text-muted-foreground font-bold">Locked</span> : <span className="text-[10px] text-muted-foreground font-bold">Saved 3</span>}
+            subtitle={language === "TH" ? "สถานที่และที่พักที่คุณบันทึกไว้" : "Your saved places and stays"}
+            onClick={() => onOpenSavedPlaces?.()}
+            rightContent={<span className="text-[10px] text-muted-foreground font-bold">{savedCount > 0 ? `${savedCount} ${language === "TH" ? "รายการ" : "items"}` : "0"}</span>}
           />
           <MenuRow
             icon={iconBox("bg-purple-50 dark:bg-purple-500/20", "text-purple-600 dark:text-purple-400", <Clock className="size-5" />)}

@@ -6,11 +6,17 @@
 const GUEST_CHECKINS_KEY = "tongdee_guest_checkins";
 const GUEST_STAMPS_KEY = "tongdee_guest_stamps";
 const GUEST_BADGES_KEY = "tongdee_guest_badges";
+const GUEST_SAVED_KEY = "tongdee_guest_saved";
 
 export interface GuestStamp {
   placeId: string;
   stampCode: string;
   collectedAt: string;
+}
+
+export interface GuestSavedItem {
+  id: string;
+  kind: "place" | "hotel";
 }
 
 function read<T>(key: string, fallback: T): T {
@@ -66,11 +72,28 @@ export function addGuestBadge(badgeCode: string): string[] {
   return next;
 }
 
+export function getGuestSaved(): GuestSavedItem[] {
+  return read<GuestSavedItem[]>(GUEST_SAVED_KEY, []);
+}
+
+export function addGuestSaved(id: string, kind: "place" | "hotel"): GuestSavedItem[] {
+  const next = [...getGuestSaved().filter((item) => !(item.id === id && item.kind === kind)), { id, kind }];
+  write(GUEST_SAVED_KEY, next);
+  return next;
+}
+
+export function removeGuestSaved(id: string, kind: "place" | "hotel"): GuestSavedItem[] {
+  const next = getGuestSaved().filter((item) => !(item.id === id && item.kind === kind));
+  write(GUEST_SAVED_KEY, next);
+  return next;
+}
+
 export function clearGuestData() {
   try {
     localStorage.removeItem(GUEST_CHECKINS_KEY);
     localStorage.removeItem(GUEST_STAMPS_KEY);
     localStorage.removeItem(GUEST_BADGES_KEY);
+    localStorage.removeItem(GUEST_SAVED_KEY);
   } catch {
     // ignore
   }

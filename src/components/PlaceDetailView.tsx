@@ -10,6 +10,8 @@ import { getDistanceKm, formatDistanceKm } from "../utils/distance";
 interface PlaceDetailViewProps {
   place: Attraction;
   isCheckedIn: boolean;
+  isSaved?: boolean;
+  onToggleSave?: () => void;
   onBack: () => void;
   onCheckIn: (id: string) => void;
   onNavigate: (name: string) => void;
@@ -26,6 +28,8 @@ interface PlaceDetailViewProps {
 export default function PlaceDetailView({
   place,
   isCheckedIn,
+  isSaved,
+  onToggleSave,
   onBack,
   onCheckIn,
   onNavigate,
@@ -156,6 +160,27 @@ export default function PlaceDetailView({
           </button>
         </div>
       )}
+
+      {/* Save bookmark toggle */}
+      <div className="absolute top-[calc(12px+env(safe-area-inset-top))] right-4 z-40">
+        <button
+          type="button"
+          onPointerDown={(event) => event.stopPropagation()}
+          onTouchStart={(event) => event.stopPropagation()}
+          onClick={(event) => {
+            event.stopPropagation();
+            onToggleSave?.();
+          }}
+          className={`w-9 h-9 rounded-full flex items-center justify-center border shadow-md backdrop-blur-md transition-all active:scale-90 cursor-pointer ${
+            isSaved
+              ? "bg-amber-400 border-amber-300 text-foreground"
+              : "bg-black/55 hover:bg-black/75 text-white border-white/10"
+          }`}
+          title={isSaved ? "ลบออกจากรายการบันทึก" : "บันทึกสถานที่"}
+        >
+          <Bookmark className={`w-4.5 h-4.5 ${isSaved ? "fill-foreground" : ""}`} />
+        </button>
+      </div>
 
       {/* Scrollable Content */}
       <div 
