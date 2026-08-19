@@ -42,6 +42,7 @@ export default function PlaceDetailView({
   onWheel,
   userLocation
 }: PlaceDetailViewProps) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const [justCheckedIn, setJustCheckedIn] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -160,6 +161,27 @@ export default function PlaceDetailView({
         </div>
       )}
 
+      {/* Save bookmark toggle */}
+      <div className="absolute top-[calc(12px+env(safe-area-inset-top))] right-4 z-40">
+        <button
+          type="button"
+          onPointerDown={(event) => event.stopPropagation()}
+          onTouchStart={(event) => event.stopPropagation()}
+          onClick={(event) => {
+            event.stopPropagation();
+            onToggleSave?.();
+          }}
+          className={`w-9 h-9 rounded-full flex items-center justify-center border shadow-md backdrop-blur-md transition-all active:scale-90 cursor-pointer ${
+            isSaved
+              ? "bg-amber-400 border-amber-300 text-foreground"
+              : "bg-black/55 hover:bg-black/75 text-white border-white/10"
+          }`}
+          title={isSaved ? "ลบออกจากรายการบันทึก" : "บันทึกสถานที่"}
+        >
+          <Bookmark className={`w-4.5 h-4.5 ${isSaved ? "fill-foreground" : ""}`} />
+        </button>
+      </div>
+
       {/* Scrollable Content */}
       <div 
         ref={scrollRef}
@@ -256,16 +278,15 @@ export default function PlaceDetailView({
               onTouchStart={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
-                onToggleSave?.();
+                setIsBookmarked(!isBookmarked);
               }}
               className={`w-9 h-9 rounded-full backdrop-blur-md flex items-center justify-center transition-all border ${
-                isSaved 
+                isBookmarked 
                   ? "bg-amber-400 text-foreground border-amber-300" 
                   : "bg-black/40 text-white border-white/10 hover:bg-black/60"
               }`}
-              title={isSaved ? "ลบออกจากรายการบันทึก" : "บันทึกสถานที่"}
             >
-              <Bookmark className={`w-4.5 h-4.5 ${isSaved ? "fill-amber-700" : ""}`} />
+              <Bookmark className={`w-4.5 h-4.5 ${isBookmarked ? "fill-amber-700" : ""}`} />
             </button>
           </div>
 
