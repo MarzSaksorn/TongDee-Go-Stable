@@ -34,7 +34,7 @@ import { fetchAccommodations } from "./services/accommodationService";
 import SplashView from "./components/SplashView";
 import OnboardingView from "./components/OnboardingView";
 import HomeView from "./components/HomeView";
-import { ToastProvider } from "./components/ToastProvider";
+import { ToastProvider, useToast } from "./components/ToastProvider";
 import AuthScreens from "./components/AuthScreens";
 import ProfileView from "./components/ProfileView";
 import FloatingChatBubble from "./components/FloatingChatBubble";
@@ -89,6 +89,7 @@ function getSavedScreen() {
 
 export default function App() {
   const { t } = useLanguage();
+  const { showToast } = useToast();
   // Screen Router state: numbers 1 to 21
   const [currentScreen, setCurrentScreen] = useState<number>(() => {
     const saved = getSavedScreen();
@@ -429,6 +430,14 @@ export default function App() {
         : [...prev, { kind, id }]
     );
 
+    const revert = () => {
+      setSavedItems((prev) =>
+        alreadySaved
+          ? [...prev, { kind, id }]
+          : prev.filter((item) => !(item.kind === kind && item.id === id))
+      );
+    };
+
     try {
       if (isGuest) {
         if (alreadySaved) {
@@ -437,27 +446,32 @@ export default function App() {
           addGuestSaved(id, kind);
         }
       } else {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session?.user) return;
-        if (alreadySaved) {
-          await supabase
-            .from("saved_places")
-            .delete()
-            .eq("user_id", session.user.id)
-            .eq("place_id", id)
-            .eq("kind", kind);
-        } else {
-          await supabase
-            .from("saved_places")
-            .upsert({ user_id: session.user.id, place_id: id, kind }, { onConflict: "user_id,place_id" });
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError || !session?.user) {
+          throw new Error("No active session");
+        }
+        const result = alreadySaved
+          ? await supabase
+              .from("saved_places")
+              .delete()
+              .eq("user_id", session.user.id)
+              .eq("place_id", id)
+              .eq("kind", kind)
+          : await supabase
+              .from("saved_places")
+              .upsert({ user_id: session.user.id, place_id: id, kind }, { onConflict: "user_id,place_id" });
+        if (result.error) {
+          throw result.error;
         }
       }
     } catch (err) {
       console.error("Failed to update saved item:", err);
-      setSavedItems((prev) =>
-        alreadySaved
-          ? [...prev, { kind, id }]
-          : prev.filter((item) => !(item.kind === kind && item.id === id))
+      revert();
+      showToast(
+        isGuest
+          ? "บันทึกไม่สำเร็จ โปรดลองอีกครั้ง"
+          : "บันทึกไม่สำเร็จ โปรดตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง",
+        "error"
       );
     }
   }, [savedItems, isGuest]);
