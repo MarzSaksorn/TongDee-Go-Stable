@@ -39,7 +39,7 @@ export default function ActiveTripView({
 
   const progressPercent = useMemo(() => {
     if (!tripPlan?.stops?.length) return 0;
-    return Math.round(((currentStopIndex) / tripPlan.stops.length) * 100);
+    return Math.round(((currentStopIndex + 1) / tripPlan.stops.length) * 100);
   }, [currentStopIndex, tripPlan?.stops?.length]);
 
   const progressBarRef = useRef<HTMLDivElement>(null);
