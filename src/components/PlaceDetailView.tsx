@@ -5,6 +5,7 @@ gsap.registerPlugin(ScrollTrigger);
 import { ChevronLeft, Star, MapPin, Volume2, VolumeX, Navigation, Bookmark, BookOpen, Clock, AlertTriangle, Lightbulb, CheckCircle2, Sparkles, Play, Pause } from "lucide-react";
 import { Attraction } from "../types";
 import { getDistanceKm, formatDistanceKm } from "../utils/distance";
+import { useToast } from "./ToastProvider";
 
 
 interface PlaceDetailViewProps {
@@ -43,6 +44,7 @@ export default function PlaceDetailView({
   userLocation
 }: PlaceDetailViewProps) {
   const [justCheckedIn, setJustCheckedIn] = useState(false);
+  const { showToast } = useToast();
   const [isVideoMuted, setIsVideoMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
@@ -256,6 +258,7 @@ export default function PlaceDetailView({
               onTouchStart={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
+                showToast(isSaved ? "ลบออกจากรายการบันทึกแล้ว" : "บันทึกสถานที่แล้ว", "success");
                 onToggleSave?.();
               }}
               className={`w-9 h-9 rounded-full backdrop-blur-md flex items-center justify-center transition-all border ${
