@@ -80,7 +80,7 @@ export default function ProfileView({
         const { data: profile } = await supabase.from("profiles").select("role").eq("owner_id", session.user.id).maybeSingle();
         if (profile) setUserRole(profile.role);
         const { data: driver } = await supabase.from("local_taxi_drivers").select("id, is_active").eq("user_id", session.user.id).maybeSingle();
-        if (driver && driver.is_active) setIsTaxiDriver(true);
+        if (driver) setIsTaxiDriver(true);
         else {
           const { data: appData } = await supabase.from("local_taxi_applications").select("application_status").eq("user_id", session.user.id).maybeSingle();
           if (appData) setTaxiAppStatus(appData.application_status);

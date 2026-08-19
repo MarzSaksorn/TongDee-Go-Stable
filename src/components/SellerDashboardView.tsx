@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ArrowLeft, Store, Plus, Package, Edit, CheckCircle2, Clock, Trash2, X, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, Store, Plus, Package, Edit, CheckCircle2, Clock, Trash2, X, Image as ImageIcon, Power } from "lucide-react";
 import { supabase } from "../lib/supabaseClient";
 import { useToast } from "./ToastProvider";
 
@@ -28,6 +28,7 @@ export default function SellerDashboardView({ onBack, sellerProfile }: SellerDas
   });
   const [isSavingShop, setIsSavingShop] = useState(false);
   const { showToast } = useToast();
+  const [isActive, setIsActive] = useState<boolean>(() => Boolean(sellerProfile?.is_active));
 
   useEffect(() => {
     fetchProducts();
@@ -67,6 +68,29 @@ export default function SellerDashboardView({ onBack, sellerProfile }: SellerDas
       showToast(`บันทึกไม่สำเร็จ: ${err.message}`, "error");
     } finally {
       setIsSavingShop(false);
+    }
+  };
+
+  const handleToggleShopActive = async () => {
+    if (!sellerProfile?.id) return;
+    const nextActive = !isActive;
+    try {
+      const { error } = await supabase
+        .from('marketplace_sellers')
+        .update({ is_active: nextActive })
+        .eq('id', sellerProfile.id);
+
+      if (error) throw error;
+      setIsActive(nextActive);
+      showToast(
+        nextActive
+          ? "เปิดร้านแล้ว ร้านค้าจะแสดงในตลาดชุมชนอีกครั้ง"
+          : "ปิดร้านแล้ว ร้านค้าจะไม่แสดงในตลาดชุมชน",
+        "success"
+      );
+    } catch (err: any) {
+      console.error("Failed to toggle shop active state:", err);
+      showToast(`ดำเนินการไม่สำเร็จ: ${err?.message || ""}`, "error");
     }
   };
 
@@ -203,9 +227,13 @@ export default function SellerDashboardView({ onBack, sellerProfile }: SellerDas
             <div className="flex-1">
                <h2 className="font-bold text-lg leading-tight">{sellerProfile.shop_name}</h2>
                <p className="text-xs text-primary-foreground/80 mt-1 flex items-center gap-1.5">
-                 {sellerProfile.is_active ? (
+                 {isActive ? (
                    <span className="flex items-center gap-1 text-emerald-300 font-bold">
                      <span className="w-2 h-2 rounded-full bg-emerald-400"></span> เปิดร้านแล้ว
+                   </span>
+                 ) : sellerProfile.verification_status === "approved" ? (
+                   <span className="flex items-center gap-1 text-amber-300 font-bold">
+                     <Clock className="w-3 h-3" /> ปิดร้านอยู่
                    </span>
                  ) : (
                    <span className="flex items-center gap-1 text-amber-300 font-bold">
@@ -234,6 +262,26 @@ export default function SellerDashboardView({ onBack, sellerProfile }: SellerDas
           >
             <Edit className="w-3 h-3" /> แก้ไขข้อมูลร้านค้า
           </button>
+          {sellerProfile.verification_status === "approved" && (
+            <>
+              <button
+                onClick={handleToggleShopActive}
+                className={`w-full text-xs font-bold py-2 rounded-xl border transition-colors flex items-center justify-center gap-1 ${
+                  isActive
+                    ? "bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border-rose-400/40"
+                    : "bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border-emerald-400/40"
+                }`}
+              >
+                <Power className="w-3 h-3" />
+                {isActive ? "ปิดร้านชั่วคราว" : "เปิดร้านอีกครั้ง"}
+              </button>
+              <p className="text-[9px] text-primary-foreground/60 text-center -mt-1">
+                {isActive
+                  ? "ปิดแล้วร้านจะหายไปจากตลาดชุมชนจนกว่าจะเปิดใหม่"
+                  : "ร้านจะแสดงในตลาดชุมชนอีกครั้งเมื่อเปิด"}
+              </p>
+            </>
+          )}
         </div>
       </div>
       

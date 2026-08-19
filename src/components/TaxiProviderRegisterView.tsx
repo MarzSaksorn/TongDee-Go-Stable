@@ -85,7 +85,7 @@ export default function TaxiProviderRegisterView({ onBack }: TaxiProviderRegiste
 
         if (driverError && driverError.code !== "PGRST116") {
           console.error("Error fetching driver profile:", driverError);
-        } else if (driverData && driverData.is_active) {
+        } else if (driverData) {
           setDriverProfile(driverData);
           setIsLoading(false);
           return;
@@ -132,6 +132,29 @@ export default function TaxiProviderRegisterView({ onBack }: TaxiProviderRegiste
     } catch (e) {
       console.error("Failed to toggle availability", e);
       showToast(tl("เปลี่ยนสถานะไม่สำเร็จ", "Failed to update status"), "error");
+    }
+  };
+
+  const handleToggleServiceActive = async () => {
+    if (!driverProfile) return;
+    const newActive = !driverProfile.is_active;
+    try {
+      const { error } = await supabase
+        .from("local_taxi_drivers")
+        .update({ is_active: newActive })
+        .eq("id", driverProfile.id);
+
+      if (error) throw error;
+      setDriverProfile((prev: any) => ({ ...prev, is_active: newActive }));
+      showToast(
+        newActive
+          ? tl("กลับมาให้บริการแล้ว", "Service restored")
+          : tl("ถอนบริการแล้ว รถจะไม่แสดงในรายการ", "Service taken down — hidden from the taxi list"),
+        "success"
+      );
+    } catch (e) {
+      console.error("Failed to toggle service active state", e);
+      showToast(tl("ดำเนินการไม่สำเร็จ", "Action failed"), "error");
     }
   };
 
@@ -367,6 +390,26 @@ export default function TaxiProviderRegisterView({ onBack }: TaxiProviderRegiste
             <FileEdit className="w-4 h-4" />
             {tl("แก้ไขข้อมูลบริการ", "Edit Service Info")}
           </button>
+
+          {/* Take down / restore taxi service */}
+          <button
+            onClick={handleToggleServiceActive}
+            className={`w-full flex items-center justify-center gap-2 font-bold text-sm py-3.5 rounded-2xl active:scale-[0.98] transition-all cursor-pointer ${
+              driverProfile.is_active
+                ? "bg-destructive/10 text-destructive border border-destructive/30 hover:bg-destructive/15"
+                : "bg-emerald-50 text-emerald-700 border border-emerald-300 hover:bg-emerald-100"
+            }`}
+          >
+            <Power className="w-4 h-4" />
+            {driverProfile.is_active
+              ? tl("ถอนบริการชั่วคราว", "Take down service")
+              : tl("กลับมาให้บริการอีกครั้ง", "Restore service")}
+          </button>
+          <p className="text-[10px] text-muted-foreground text-center -mt-2">
+            {driverProfile.is_active
+              ? tl("รถของคุณจะหายไปจากรายการรถรับจ้างชั่วคราว", "Your taxi will be hidden from the taxi list until restored")
+              : tl("รถของคุณจะแสดงในรายการรถรับจ้างอีกครั้ง", "Your taxi will appear in the taxi list again")}
+          </p>
         </div>
 
         {isEditServiceModalOpen && (
