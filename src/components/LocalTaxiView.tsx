@@ -264,7 +264,7 @@ export default function LocalTaxiView({ onBack }: LocalTaxiViewProps) {
         </span>
       </div>
 
-      <div className="px-4 pb-[calc(24px+env(safe-area-inset-bottom))] space-y-3 flex-1">
+      <div className="px-4 pb-[calc(96px+env(safe-area-inset-bottom))] space-y-3 flex-1">
         {isLoading ? (
           <div className="bg-card border border-border rounded-2xl p-10 flex flex-col items-center gap-3">
             <Loader2 className="w-7 h-7 animate-spin text-primary" />
