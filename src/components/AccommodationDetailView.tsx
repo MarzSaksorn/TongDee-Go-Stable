@@ -1,15 +1,12 @@
 import React, { useState, useMemo } from "react";
-import { ChevronLeft, Star, MapPin, Phone, Navigation, Clock, Globe, MessageSquare, Check, Wifi, Car, Coffee, Snowflake, Tv, Dumbbell, Waves, Bike, AlarmCheck, Ban, Hotel, Home, Building2, Trees, Bookmark } from "lucide-react";
+import { ChevronLeft, Star, MapPin, Phone, Navigation, Clock, Globe, MessageSquare, Check, Wifi, Car, Coffee, Snowflake, Tv, Dumbbell, Waves, Bike, AlarmCheck, Ban, Hotel, Home, Building2, Trees } from "lucide-react";
 import { Accommodation } from "../types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getDistanceKm, formatDistanceKm } from "../utils/distance";
-import { useToast } from "./ToastProvider";
 
 interface AccommodationDetailViewProps {
   accommodation: Accommodation;
-  isSaved?: boolean;
-  onToggleSave?: () => void;
   onBack: () => void;
   onNavigate?: () => void;
   userLocation?: { lat: number; lng: number } | null;
@@ -44,15 +41,12 @@ const propertyTypeLabels: Record<string, string> = {
 
 export default function AccommodationDetailView({
   accommodation,
-  isSaved,
-  onToggleSave,
   onBack,
   onNavigate,
   userLocation
 }: AccommodationDetailViewProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showPhone, setShowPhone] = useState(false);
-  const { showToast } = useToast();
 
   const images = accommodation.images.length > 0
     ? accommodation.images
@@ -102,25 +96,6 @@ export default function AccommodationDetailView({
           className="w-9 h-9 rounded-full bg-black/55 hover:bg-black/75 text-white flex items-center justify-center border border-white/10 shadow-md backdrop-blur-md transition-all active:scale-90"
         >
           <ChevronLeft className="w-5 h-5 text-white" />
-        </button>
-      </div>
-
-      {/* Save bookmark toggle */}
-      <div className="absolute top-[calc(12px+env(safe-area-inset-top))] right-4 z-40">
-        <button
-          type="button"
-          onClick={() => {
-            showToast(isSaved ? "ลบออกจากรายการบันทึกแล้ว" : "บันทึกที่พักแล้ว", "success");
-            onToggleSave?.();
-          }}
-          className={`w-9 h-9 rounded-full flex items-center justify-center border shadow-md backdrop-blur-md transition-all active:scale-90 cursor-pointer ${
-            isSaved
-              ? "bg-amber-400 border-amber-300 text-foreground"
-              : "bg-black/55 hover:bg-black/75 text-white border-white/10"
-          }`}
-          title={isSaved ? "ลบออกจากรายการบันทึก" : "บันทึกที่พัก"}
-        >
-          <Bookmark className={`w-4.5 h-4.5 ${isSaved ? "fill-foreground" : ""}`} />
         </button>
       </div>
 

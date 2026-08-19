@@ -18,11 +18,10 @@ export default function SafetyModeView({
   const [driftAlert, setDriftAlert] = useState(true);
 
   const emergencyContacts = [
-    { name: "ตำรวจท้องถิ่น", tel: "191", color: "bg-amber-50 text-amber-700" },
-    { name: "ศูนย์ปฏิบัติการสายตรวจ", tel: "055-832-060", color: "bg-amber-50 text-amber-700"},
     { name: "สายด่วนตำรวจท่องเที่ยว (ติดต่อฉุกเฉินสากล)", tel: "1155", color: "bg-primary/10 text-primary" },
-    { name: "สมาคมกู้ภัยวัดหมอนไม้", tel: "089-503-9705", color: "bg-amber-50 text-amber-700" },
-    { name: "โรงพยาบาลอำเภอพิชัย", tel: "055-832-100", color: "bg-rose-50 text-rose-600" },
+    { name: "สพภ. อำเภอพิชัย (กู้ภัยทางบกและเหตุร้าย)", tel: "055-421111", color: "bg-primary/10 text-blue-800" },
+    { name: "โรงพยาบาลอำเภอพิชัย (กู้ชีพฉุกเฉิน)", tel: "1669", color: "bg-rose-50 text-rose-600" },
+    { name: "หน่วยกู้ภัยมูลนิธิร่วมใจอุตรดิตถ์", tel: "191", color: "bg-amber-50 text-amber-700" }
   ];
 
   const handleShareClick = () => {

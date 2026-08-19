@@ -2,17 +2,14 @@ import React, { useState, useMemo, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
-import { ChevronLeft, Star, MapPin, Volume2, VolumeX, Navigation, Bookmark, BookOpen, Clock, AlertTriangle, Lightbulb, CheckCircle2, Sparkles, Play, Pause } from "lucide-react";
+import { ChevronLeft, Star, MapPin, Volume2, VolumeX, Navigation, BookOpen, Clock, AlertTriangle, Lightbulb, CheckCircle2, Sparkles, Play, Pause } from "lucide-react";
 import { Attraction } from "../types";
 import { getDistanceKm, formatDistanceKm } from "../utils/distance";
-import { useToast } from "./ToastProvider";
 
 
 interface PlaceDetailViewProps {
   place: Attraction;
   isCheckedIn: boolean;
-  isSaved?: boolean;
-  onToggleSave?: () => void;
   onBack: () => void;
   onCheckIn: (id: string) => void;
   onNavigate: (name: string) => void;
@@ -29,8 +26,6 @@ interface PlaceDetailViewProps {
 export default function PlaceDetailView({
   place,
   isCheckedIn,
-  isSaved,
-  onToggleSave,
   onBack,
   onCheckIn,
   onNavigate,
@@ -44,7 +39,6 @@ export default function PlaceDetailView({
   userLocation
 }: PlaceDetailViewProps) {
   const [justCheckedIn, setJustCheckedIn] = useState(false);
-  const { showToast } = useToast();
   const [isVideoMuted, setIsVideoMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
@@ -250,28 +244,6 @@ export default function PlaceDetailView({
               </div>
             </>
           )}
-
-          {/* Save bookmark toggle */}
-          <div className="absolute top-[calc(12px+env(safe-area-inset-top))] right-4 z-10">
-            <button
-              type="button"
-              onPointerDown={(event) => event.stopPropagation()}
-              onTouchStart={(event) => event.stopPropagation()}
-              onClick={(event) => {
-                event.stopPropagation();
-                showToast(isSaved ? "ลบออกจากรายการบันทึกแล้ว" : "บันทึกสถานที่แล้ว", "success");
-                onToggleSave?.();
-              }}
-              className={`w-9 h-9 rounded-full backdrop-blur-md flex items-center justify-center transition-all border ${
-                isSaved
-                  ? "bg-amber-400 text-foreground border-amber-300"
-                  : "bg-black/40 text-white border-white/10 hover:bg-black/60"
-              }`}
-              title={isSaved ? "ลบออกจากรายการบันทึก" : "บันทึกสถานที่"}
-            >
-              <Bookmark className={`w-4.5 h-4.5 ${isSaved ? "fill-amber-700" : ""}`} />
-            </button>
-          </div>
 
           {/* Title overlay (raised when video controls are shown) */}
           <div className={`absolute left-5 right-5 text-white ${hasVideo ? "bottom-20" : "bottom-4"}`}>
