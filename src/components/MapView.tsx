@@ -36,8 +36,6 @@ interface MapViewProps {
   onPendingAccommodationHandled?: () => void;
   userLocation?: { lat: number; lng: number } | null;
   onLocateUser?: (loc: { lat: number; lng: number }) => void;
-  savedItems?: { id: string; kind: "place" | "hotel" }[];
-  onToggleSave?: (kind: "place" | "hotel", id: string) => void;
 }
 
 const API_KEY =
@@ -126,9 +124,7 @@ export default function MapView({
   onPendingPlaceHandled,
   onPendingAccommodationHandled,
   userLocation,
-  onLocateUser,
-  savedItems = [],
-  onToggleSave
+  onLocateUser
 }: MapViewProps) {
   const { showToast } = useToast();
   const allPlaces = locations && locations.length > 0 ? locations : ATTRACTIONS;
@@ -1098,8 +1094,6 @@ export default function MapView({
                   <AccommodationDetailView
                     accommodation={selectedAccommodation}
                     userLocation={userLocation}
-                    isSaved={savedItems.some((s) => s.kind === "hotel" && s.id === selectedAccommodation.id)}
-                    onToggleSave={() => onToggleSave?.("hotel", selectedAccommodation.id)}
                     onBack={() => setSheetState("compact")}
                   />
                 ) : selectedPlace ? (
@@ -1107,8 +1101,6 @@ export default function MapView({
                     place={selectedPlace}
                     userLocation={userLocation}
                     isCheckedIn={checkedInIds.includes(selectedPlace.id)}
-                    isSaved={savedItems.some((s) => s.kind === "place" && s.id === selectedPlace.id)}
-                    onToggleSave={() => onToggleSave?.("place", selectedPlace.id)}
                     onBack={() => setSheetState("compact")}
                     onCheckIn={onCheckIn || (() => {})}
                     onNavigate={() => {

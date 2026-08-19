@@ -47,7 +47,6 @@ export const SCREENS: Record<number, ScreenMeta> = {
   27: { id: 27, tab: 1,  showNav: false, restorable: false, guestSafe: false, backFallback: 5 },  // Active Trip (in-memory tripPlan needed)
   28: { id: 28, tab: 4,  showNav: false, restorable: true,  guestSafe: false, backFallback: 12 }, // Accommodation Owner Register
   29: { id: 29, tab: 0,  showNav: true,  restorable: true,  guestSafe: true,  backFallback: 4 },  // Hotel Selection
-  30: { id: 30, tab: -1, showNav: false, restorable: true,  guestSafe: true,  backFallback: 12 }, // Saved Places
   40: { id: 40, tab: 4,  showNav: false, restorable: true,  guestSafe: false, backFallback: 12 }, // Admin Panel
 };
 

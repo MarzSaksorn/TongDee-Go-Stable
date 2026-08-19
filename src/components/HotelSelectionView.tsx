@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import { ChevronLeft, Search, Star, MapPin, Bed, Wifi, Car, Coffee, Snowflake, Tv, Waves, Home, Building2, Trees, Hotel, Bookmark } from "lucide-react";
+import { ChevronLeft, Search, Star, MapPin, Bed, Wifi, Car, Coffee, Snowflake, Tv, Waves, Home, Building2, Trees, Hotel } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Accommodation } from "../types";
@@ -42,8 +42,6 @@ function truncate(str: string, n: number): string {
 interface HotelSelectionViewProps {
   accommodations: Accommodation[];
   userLocation?: { lat: number; lng: number } | null;
-  savedItems?: { id: string; kind: "place" | "hotel" }[];
-  onToggleSave?: (kind: "place" | "hotel", id: string) => void;
   onBack: () => void;
   onSelectAccommodation: (id: string) => void;
 }
@@ -51,8 +49,6 @@ interface HotelSelectionViewProps {
 export default function HotelSelectionView({
   accommodations,
   userLocation,
-  savedItems = [],
-  onToggleSave,
   onBack,
   onSelectAccommodation,
 }: HotelSelectionViewProps) {
@@ -228,25 +224,6 @@ export default function HotelSelectionView({
                         <p className="text-white/80 text-[10px] font-semibold mt-0.5 drop-shadow-sm">{item.priceRange}</p>
                       )}
                     </div>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onToggleSave?.("hotel", item.id);
-                      }}
-                      className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center border shadow-md backdrop-blur-md transition-all active:scale-90 cursor-pointer z-10 ${
-                        savedItems.some((s) => s.kind === "hotel" && s.id === item.id)
-                          ? "bg-amber-400 border-amber-300 text-foreground"
-                          : "bg-black/45 hover:bg-black/65 text-white border-white/15"
-                      }`}
-                      title={
-                        savedItems.some((s) => s.kind === "hotel" && s.id === item.id)
-                          ? "ลบออกจากรายการบันทึก"
-                          : "บันทึกที่พัก"
-                      }
-                    >
-                      <Bookmark className={`w-4 h-4 ${savedItems.some((s) => s.kind === "hotel" && s.id === item.id) ? "fill-foreground" : ""}`} />
-                    </button>
                   </div>
                   <div className="p-3.5 space-y-2.5">
                     {item.description && (
