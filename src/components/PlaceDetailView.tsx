@@ -196,7 +196,7 @@ export default function PlaceDetailView({
 
           {/* Mute toggle for video */}
           {hasVideo && (
-            <div className="absolute top-[calc(12px+env(safe-area-inset-top))] right-15 z-10">
+            <div className="absolute top-[calc(12px+env(safe-area-inset-top))] right-4 z-10">
               <button 
                 onPointerDown={(event) => event.stopPropagation()}
                 onTouchStart={(event) => event.stopPropagation()}
