@@ -34,7 +34,7 @@ import { fetchAccommodations } from "./services/accommodationService";
 import SplashView from "./components/SplashView";
 import OnboardingView from "./components/OnboardingView";
 import HomeView from "./components/HomeView";
-import { ToastProvider } from "./components/ToastProvider";
+import { ToastProvider, useToast } from "./components/ToastProvider";
 import AuthScreens from "./components/AuthScreens";
 import ProfileView from "./components/ProfileView";
 import FloatingChatBubble from "./components/FloatingChatBubble";
@@ -61,9 +61,11 @@ const AccommodationOwnerRegisterView = lazy(() => import("./components/Accommoda
 const AdminPanelView = lazy(() => import("./components/AdminPanelView"));
 const HotelSelectionView = lazy(() => import("./components/HotelSelectionView"));
 const ActiveTripView = lazy(() => import("./components/ActiveTripView"));
+const SavedPlacesView = lazy(() => import("./components/SavedPlacesView"));
 import { useLanguage } from "./i18n/LanguageContext";
 import { SCREENS, isGuestSafeScreen } from "./router/screens";
 import { addGuestCheckin, addGuestStamp, getGuestCheckins, clearGuestData } from "./services/guestStore";
+import { loadSavedItems, saveItem, removeSavedItem, migrateGuestSavedToAccount, type SavedItem } from "./services/savedService";
 
 const CURRENT_SCREEN_KEY = "tongdee_current_screen";
 const SHOW_FLOATING_ASK_AI_BUTTON = false;
@@ -88,6 +90,7 @@ function getSavedScreen() {
 
 export default function App() {
   const { t } = useLanguage();
+  const { showToast } = useToast();
   // Screen Router state: numbers 1 to 21
   const [currentScreen, setCurrentScreen] = useState<number>(() => {
     const saved = getSavedScreen();
@@ -121,6 +124,7 @@ export default function App() {
   const [previousScreen, setPreviousScreen] = useState<number>(4);
   const [isHighDpiCompact, setIsHighDpiCompact] = useState<boolean>(true);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
 
   const [homeDetailPlaceId, setHomeDetailPlaceId] = useState<string | null>(null);
 
@@ -293,6 +297,12 @@ export default function App() {
             setCurrentScreen(saved);
           }
         }
+
+        // Load saved places & hotels (uses the DB for accounts, localStorage for guests)
+        const savedItems = await loadSavedItems();
+        if (mounted) {
+          setSavedItems(savedItems);
+        }
       } catch (err) {
         console.error("Failed to restore auth session:", err);
       } finally {
@@ -353,6 +363,15 @@ export default function App() {
           setCheckedInIds(merged);
         }
 
+        // Migrate any guest-mode saved places/hotels into the account
+        const migratedSaved = await migrateGuestSavedToAccount();
+        if (migratedSaved.length > 0) {
+          setSavedItems((prev) => {
+            const merged = [...prev, ...migratedSaved];
+            return Array.from(new Map(merged.map((m) => [`${m.kind}:${m.id}`, m])).values());
+          });
+        }
+
         // Only redirect of state if not on a restorable screen already
         setCurrentScreen((prevScreen) => {
           if (!isRestorableScreen(prevScreen)) {
@@ -365,6 +384,7 @@ export default function App() {
         setCurrentUser(null);
         setIsGuest(true);
         setCheckedInIds(["wat_mahathat"]);
+        setSavedItems([]);
         sessionStorage.removeItem(CURRENT_SCREEN_KEY);
         setCurrentScreen(17); // Go back to welcome
       }
@@ -381,6 +401,31 @@ export default function App() {
       saveCurrentScreen(currentScreen);
     }
   }, [currentScreen, isGuest]);
+
+  const toggleSaved = useCallback(async (kind: "place" | "hotel", id: string) => {
+    const alreadySaved = savedItems.some((item) => item.kind === kind && item.id === id);
+    setSavedItems((prev) =>
+      alreadySaved
+        ? prev.filter((item) => !(item.kind === kind && item.id === id))
+        : [...prev, { kind, id }]
+    );
+
+    try {
+      if (alreadySaved) {
+        await removeSavedItem(kind, id);
+      } else {
+        await saveItem(kind, id);
+      }
+    } catch (err) {
+      console.error("Failed to update saved item:", err);
+      setSavedItems((prev) =>
+        alreadySaved
+          ? [...prev, { kind, id }]
+          : prev.filter((item) => !(item.kind === kind && item.id === id))
+      );
+      showToast("บันทึกไม่สำเร็จ โปรดตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง", "error");
+    }
+  }, [savedItems, showToast]);
 
   useEffect(() => {
     if (currentScreen === 8) {
@@ -874,6 +919,8 @@ export default function App() {
               <PlaceDetailView 
                 place={activePlace}
                 isCheckedIn={checkedInIds.includes(activePlace.id)}
+                isSaved={savedItems.some((s) => s.kind === "place" && s.id === activePlace.id)}
+                onToggleSave={() => toggleSaved("place", activePlace.id)}
                 onBack={() => {
                   if (previousScreen === 8) {
                     setCurrentScreen(8);
@@ -926,6 +973,8 @@ export default function App() {
                   checkedInIds={checkedInIds}
                   onCheckIn={handlePlaceCheckIn}
                   displayName={currentUser?.name || "คุณแมว"}
+                  savedItems={savedItems}
+                  onToggleSave={toggleSaved}
                   pendingPlaceId={pendingMapPlaceId}
                   pendingAccommodationId={pendingMapAccommodationId}
                   pendingOpenMode={pendingMapOpenMode}
@@ -1058,6 +1107,8 @@ export default function App() {
                   if (updateError) throw updateError;
                 }}
                 onOpenAppearanceSettings={() => setCurrentScreen(25)}
+                savedCount={savedItems.length}
+                onOpenSavedPlaces={() => setCurrentScreen(30)}
               />
             )}
 
@@ -1154,8 +1205,32 @@ export default function App() {
               <HotelSelectionView
                 accommodations={accommodations}
                 userLocation={userLocation}
+                savedItems={savedItems}
+                onToggleSave={toggleSaved}
                 onBack={() => setCurrentScreen(4)}
                 onSelectAccommodation={handleHotelSelect}
+              />
+            )}
+
+            {currentScreen === 30 && (
+              <SavedPlacesView
+                savedItems={savedItems}
+                locations={locations}
+                accommodations={accommodations}
+                onToggleSave={toggleSaved}
+                onBack={() => setCurrentScreen(12)}
+                onOpenPlace={(placeId) => {
+                  setActivePlaceId(placeId);
+                  setPreviousScreen(30);
+                  setCurrentScreen(7);
+                }}
+                onOpenHotel={(accommodationId) => {
+                  setPendingMapAccommodationId(accommodationId);
+                  setPendingMapPlaceId(null);
+                  setPendingMapOpenMode("detail");
+                  setHasOpenedMap(true);
+                  setCurrentScreen(8);
+                }}
               />
             )}
 

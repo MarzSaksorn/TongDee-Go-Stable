@@ -22,6 +22,7 @@ export const ROUTES = {
   WEATHER: "/weather",
   ADMIN: "/admin",
   PROFILE: "/profile",
+  SAVED: "/saved",
 } as const;
 
 const screenIdToPath: Record<number, string> = {
@@ -50,6 +51,7 @@ const screenIdToPath: Record<number, string> = {
   25: ROUTES.SETTINGS_APPEARANCE,
   26: ROUTES.WEATHER,
   27: ROUTES.PLAN_ACTIVE,
+  30: ROUTES.SAVED,
   40: ROUTES.ADMIN,
 };
 
