@@ -374,10 +374,10 @@ export default function PlaceDetailView({
 
       {/* Floating Bottom Action Bar */}
       <div className="absolute bottom-[calc(28px+env(safe-area-inset-bottom))] left-3 right-3 bg-card border border-border rounded-2xl px-4 py-3 shadow-lg flex gap-2.5 safe-area-bottom">
-        <button
-          onClick={() => onNavigate(place.name)}
-          className="flex-1 py-3 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-extrabold rounded-xl flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer shadow-md shadow-primary/30"
-        >
+<button
+            onClick={() => onNavigate(place.name)}
+            className="flex-1 py-3 bg-primary/10 hover:bg-primary/20 text-primary-foreground text-xs font-extrabold rounded-xl flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer shadow-md shadow-primary/30"
+          >
           <Navigation className="w-4 h-4" />
           <span>นำทาง</span>
         </button>

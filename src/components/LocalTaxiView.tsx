@@ -395,7 +395,7 @@ export default function LocalTaxiView({ onBack }: LocalTaxiViewProps) {
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setSelectedDriver(null)}
           />
-          <div className="relative bg-card w-full sm:max-w-sm rounded-2xl max-h-[85vh] overflow-y-auto shadow-2xl border border-border animate-in fade-in zoom-in-95 duration-200">
+          <div className="relative bg-card w-full sm:max-w-sm rounded-2xl max-h-[85vh] overflow-y-auto shadow-2xl border border-border animate-in fade-in zoom-in-95 duration-200 hover:shadow-xl hover:scale-1005">
             <div className="sticky top-0 bg-card border-b border-border z-10 px-5 py-3.5 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
