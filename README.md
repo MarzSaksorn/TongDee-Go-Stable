@@ -63,7 +63,7 @@ docker compose up --build -d
 
 Open <http://localhost:3002>. Compose binds to `127.0.0.1` by default. Set `HOST_PORT` in `.env` to use a different local port. Check status and logs with `docker compose ps` and `docker compose logs -f tongdee-go`. The health endpoint is `GET /health`.
 
-`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `GOOGLE_MAPS_PLATFORM_KEY` are supplied at image build time because Vite embeds them in client assets. These are browser-visible settings; never use a Supabase service-role key here. `GEMINI_API_KEY` and `GOOGLE_WEATHER_API_KEY` remain runtime-only server settings. The app doesn't need a local data volume because its persistent user data is handled by Supabase and browser storage.
+`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` default to this repository's public Supabase project settings; override them in `.env` if needed. `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `GOOGLE_MAPS_PLATFORM_KEY` are supplied at image build time because Vite embeds them in client assets. Rebuild after changing these values. They are browser-visible settings; never use a Supabase service-role key here. `GEMINI_API_KEY` and `GOOGLE_WEATHER_API_KEY` remain runtime-only server settings. The app doesn't need a local data volume because its persistent user data is handled by Supabase and browser storage.
 
 ## Environment Variables
 

@@ -3,8 +3,8 @@ services:
     build:
       context: .
       args:
-        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-}
-        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:-}
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-https://jbafdzoihklmfurywmhs.supabase.co}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:-sb_publishable_HwSmpUyHTmW5xoe5B_Y3_g_PlttMSC4}
         GOOGLE_MAPS_PLATFORM_KEY: ${GOOGLE_MAPS_PLATFORM_KEY:-}
     init: true
     restart: unless-stopped
