@@ -9,9 +9,12 @@ dotenv.config();
 
 async function startServer() {
   const app = express();
-  const PORT = Number(process.env.PORT || 3000);
+  const PORT = Number(process.env.PORT || 3001);
 
   app.use(express.json());
+  app.get("/health", (_req, res) => {
+    res.status(200).json({ status: "ok" });
+  });
 
   // API Chat route using Gemini API Key
   app.post("/api/chat", async (req, res) => {

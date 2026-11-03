@@ -27,8 +27,7 @@ An AI-powered tourism companion for Phichai district (อำเภอพิช�
 | i18n / Theming | TH/EN via `LanguageContext`; accent themes, UI scale, and dark mode via `AppearanceContext` |
 
 ## Getting Started
-
-Prerequisites: Node.js 20 or newer.
+Prerequisites: Node.js 22 or newer.
 
 1. Install dependencies:
 
@@ -50,7 +49,21 @@ Prerequisites: Node.js 20 or newer.
    npm run dev
    ```
 
-   Open http://localhost:3000. The Express server serves the Vite app in middleware mode, so the API routes (`/api/chat`, `/api/trip-planner/generate`, `/api/weather/home`) work out of the box — no separate frontend and backend processes.
+   Open http://localhost:3001. The Express server serves the Vite app in middleware mode, so the API routes (`/api/chat`, `/api/trip-planner/generate`, `/api/weather/home`) work out of the box — no separate frontend and backend processes.
+
+## Run with Docker Compose
+
+Requirements: Docker Engine with the Compose plugin.
+
+```bash
+cp .env.example .env
+# Set any optional API keys in .env, then build and start the app.
+docker compose up --build -d
+```
+
+Open <http://localhost:3001>. Compose binds to `127.0.0.1` by default. Set `HOST_PORT` in `.env` to use a different local port. Check status and logs with `docker compose ps` and `docker compose logs -f tongdee-go`. The health endpoint is `GET /health`.
+
+`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `GOOGLE_MAPS_PLATFORM_KEY` are supplied at image build time because Vite embeds them in client assets. These are browser-visible settings; never use a Supabase service-role key here. `GEMINI_API_KEY` and `GOOGLE_WEATHER_API_KEY` remain runtime-only server settings. The app doesn't need a local data volume because its persistent user data is handled by Supabase and browser storage.
 
 ## Environment Variables
 
@@ -67,7 +80,7 @@ Prerequisites: Node.js 20 or newer.
 
 | Script | Description |
 |---|---|
-| `npm run dev` | Start the dev server (Express + Vite middleware) on port 3000 |
+| `npm run dev` | Start the dev server (Express + Vite middleware) on port 3001 |
 | `npm run build` | Build the frontend to `dist/` and bundle the server to `dist/server.cjs` |
 | `npm start` | Run the production server (`node dist/server.cjs`) |
 | `npm run lint` | Type-check the project (`tsc --noEmit`) |
