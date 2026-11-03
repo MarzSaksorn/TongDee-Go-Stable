@@ -7,7 +7,7 @@ interface ThongdeeGoLogoProps {
 }
 
 export default function ThongdeeGoLogo({ className = "", size = "100%", showBg = true }: ThongdeeGoLogoProps) {
-  const logoUrl = "https://storage.googleapis.com/tongdee-go/App-logo.png";
+  const logoUrl = "https://pub-b73952151b5a4abc954f3ac7693e3b6a.r2.dev/App-logo.png";
   
   return (
     <div 
