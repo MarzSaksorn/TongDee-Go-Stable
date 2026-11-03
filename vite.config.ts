@@ -39,15 +39,15 @@ export default defineConfig(() => {
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
       proxy: {
         '/api/chat': {
-          target: process.env.AI_CHAT_API_URL || 'http://localhost:3001',
+          target: process.env.AI_CHAT_API_URL || 'http://localhost:3002',
           changeOrigin: true,
         },
         '/api/trip-planner/generate': {
-          target: process.env.AI_CHAT_API_URL || 'http://localhost:3001',
+          target: process.env.AI_CHAT_API_URL || 'http://localhost:3002',
           changeOrigin: true,
         },
         '/api/weather/home': {
-          target: process.env.AI_CHAT_API_URL || 'http://localhost:3001',
+          target: process.env.AI_CHAT_API_URL || 'http://localhost:3002',
           changeOrigin: true,
         },
       },

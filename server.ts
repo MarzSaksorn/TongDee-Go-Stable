@@ -9,7 +9,7 @@ dotenv.config();
 
 async function startServer() {
   const app = express();
-  const PORT = Number(process.env.PORT || 3001);
+  const PORT = Number(process.env.PORT || 3002);
 
   app.use(express.json());
   app.get("/health", (_req, res) => {
